@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Destiny - Travel Aggregator</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#257bf4",
+                        "primary-dark": "#1a62c9",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101722",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1e293b",
+                        "text-main": "#111418",
+                        "text-sub": "#60728a",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar hiding for horizontal scroll areas */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-main dark:text-white antialiased">
+<div class="relative flex h-full min-h-screen w-full flex-col overflow-x-hidden max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-2xl">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-50 bg-surface-light dark:bg-surface-dark/95 backdrop-blur-sm border-b border-gray-100 dark:border-gray-800 px-4 py-3 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="flex items-center justify-center size-8 rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-xl">travel_explore</span>
+</div>
+<h1 class="text-xl font-extrabold tracking-tight text-primary">Destiny</h1>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+<span class="material-symbols-outlined text-text-main dark:text-white">notifications</span>
+</button>
+<button class="flex items-center justify-center size-10 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+<span class="material-symbols-outlined text-text-main dark:text-white">menu</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 pb-24">
+<!-- Hero Section -->
+<div class="relative h-64 w-full overflow-hidden rounded-b-3xl">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="View from an airplane window looking out at a sunrise over clouds" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD7p4nFOMVJuwZwTCGp1h5C7uSdE63iQFMMA1qXT07p7fxoTghZVtVJwfpiv3Z26QxeEr8V2j57TNg5l62o5MlQ8Vc09Hxm_rHu5fp9E4-9p208NIN6Fo8i-roQbUcH3vwzuAP13fWzDA6x3oT-4XmEsYk1HsbpZD4INehShlx6yitETqSU-9lRxN3l9KfE6B3fNqi0lW84JloC7WJsuUS82mvtV15RF3MDyTEI9geaFSboZCGxRN9xAbGPk-zACPsbkSjlEdnqD4U");'>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 to-black/10"></div>
+<div class="absolute bottom-16 left-0 w-full px-6">
+<p class="text-white/90 font-medium text-sm mb-1 uppercase tracking-wider">Explore the world</p>
+<h2 class="text-white text-3xl font-bold leading-tight">Where will destiny take you?</h2>
+</div>
+</div>
+<!-- Search Widget Card (Overlapping Hero) -->
+<div class="px-4 -mt-12 relative z-10">
+<div class="bg-surface-light dark:bg-surface-dark rounded-2xl shadow-xl p-2 border border-gray-100 dark:border-gray-700">
+<!-- Tabs -->
+<div class="flex border-b border-gray-100 dark:border-gray-700">
+<button class="flex flex-1 flex-col items-center justify-center py-3 gap-1 border-b-2 border-primary text-primary transition-colors">
+<span class="material-symbols-outlined">flight</span>
+<span class="text-xs font-bold">Flights</span>
+</button>
+<button class="flex flex-1 flex-col items-center justify-center py-3 gap-1 border-b-2 border-transparent text-text-sub hover:text-primary hover:border-primary/30 transition-colors">
+<span class="material-symbols-outlined">train</span>
+<span class="text-xs font-bold">Trains</span>
+</button>
+<button class="flex flex-1 flex-col items-center justify-center py-3 gap-1 border-b-2 border-transparent text-text-sub hover:text-primary hover:border-primary/30 transition-colors">
+<span class="material-symbols-outlined">directions_bus</span>
+<span class="text-xs font-bold">Buses</span>
+</button>
+<button class="flex flex-1 flex-col items-center justify-center py-3 gap-1 border-b-2 border-transparent text-text-sub hover:text-primary hover:border-primary/30 transition-colors">
+<span class="material-symbols-outlined">local_taxi</span>
+<span class="text-xs font-bold">Cabs</span>
+</button>
+</div>
+<!-- Input Fields -->
+<div class="p-4 flex flex-col gap-4">
+<!-- Route -->
+<div class="flex flex-col gap-3 relative">
+<div class="bg-background-light dark:bg-background-dark/50 rounded-xl p-3 border border-transparent focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+<label class="text-xs font-medium text-text-sub block mb-1">From</label>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-text-sub text-[20px]">flight_takeoff</span>
+<input class="w-full bg-transparent border-none p-0 text-text-main dark:text-white font-semibold placeholder-gray-400 focus:ring-0 text-base" placeholder="New York (JFK)" type="text" value="New York (JFK)"/>
+</div>
+</div>
+<!-- Swap Button -->
+<button class="absolute top-1/2 left-[calc(100%-24px)] -translate-x-full -translate-y-1/2 z-10 bg-surface-light dark:bg-surface-dark border border-gray-200 dark:border-gray-600 rounded-full p-1.5 shadow-sm text-primary hover:bg-gray-50 transition-colors">
+<span class="material-symbols-outlined text-[18px]">swap_vert</span>
+</button>
+<div class="bg-background-light dark:bg-background-dark/50 rounded-xl p-3 border border-transparent focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+<label class="text-xs font-medium text-text-sub block mb-1">To</label>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-text-sub text-[20px]">flight_land</span>
+<input class="w-full bg-transparent border-none p-0 text-text-main dark:text-white font-semibold placeholder-gray-400 focus:ring-0 text-base" placeholder="Destination" type="text"/>
+</div>
+</div>
+</div>
+<!-- Details Row -->
+<div class="flex gap-3">
+<div class="flex-1 bg-background-light dark:bg-background-dark/50 rounded-xl p-3 border border-transparent focus-within:border-primary transition-all">
+<label class="text-xs font-medium text-text-sub block mb-1">Depart</label>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-text-sub text-[20px]">calendar_month</span>
+<input class="w-full bg-transparent border-none p-0 text-text-main dark:text-white font-semibold placeholder-gray-400 focus:ring-0 text-base" type="text" value="12 Oct, Thu"/>
+</div>
+</div>
+<div class="flex-1 bg-background-light dark:bg-background-dark/50 rounded-xl p-3 border border-transparent focus-within:border-primary transition-all">
+<label class="text-xs font-medium text-text-sub block mb-1">Travelers</label>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-text-sub text-[20px]">group</span>
+<input class="w-full bg-transparent border-none p-0 text-text-main dark:text-white font-semibold placeholder-gray-400 focus:ring-0 text-base" type="text" value="1 Adult"/>
+</div>
+</div>
+</div>
+<!-- Search Button -->
+<button class="w-full bg-primary hover:bg-primary-dark text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/30 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">search</span>
+                            Find Cheapest Rates
+                        </button>
+</div>
+</div>
+</div>
+<!-- Best Deals Section -->
+<div class="mt-8">
+<div class="flex items-center justify-between px-5 mb-4">
+<h3 class="text-lg font-bold text-text-main dark:text-white">Best Deals Today</h3>
+<a class="text-primary text-sm font-semibold hover:underline" href="#">View all</a>
+</div>
+<!-- Horizontal Scroll Container -->
+<div class="flex overflow-x-auto gap-4 px-5 pb-6 no-scrollbar snap-x">
+<!-- Card 1 -->
+<div class="min-w-[260px] snap-center bg-surface-light dark:bg-surface-dark rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
+<div class="h-32 bg-gray-200 relative">
+<img class="w-full h-full object-cover" data-alt="Eiffel Tower in Paris with blue sky background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkT7nyEvhmjxXTAu-eaMp89KlfDanHWvHqFa4M1wDPbsgPATzWFbVfr1arjho57n6nCYaszdJ-hMlPrzY0Q1RcC-CTSYSF__4mJyTekFH-j-izX60qxu0PD0wPWif4N7fZLNObmdteZwrYMoJGrNsMjk2nkJLzSeatYB1-4rDo7-J9lekGunH5h0ZUVP5zGigjcI1z28AMnMLbmWg5PzxVry8l7Y3ycadLqwkHiIAyZXlrd_1wJgY070L6hqYV04KAfVUHije6Lmo"/>
+<div class="absolute top-2 right-2 bg-white/90 dark:bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg text-xs font-bold text-text-main dark:text-white flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-yellow-500">star</span>
+                                4.8
+                            </div>
+</div>
+<div class="p-3">
+<div class="flex justify-between items-start mb-1">
+<div>
+<h4 class="font-bold text-text-main dark:text-white">Paris, France</h4>
+<p class="text-xs text-text-sub">Round Trip • Economy</p>
+</div>
+<div class="bg-primary/10 p-1.5 rounded-lg">
+<span class="material-symbols-outlined text-primary text-[20px]">flight</span>
+</div>
+</div>
+<div class="flex items-end justify-between mt-3">
+<div>
+<p class="text-xs text-text-sub line-through">$580</p>
+<p class="text-lg font-bold text-primary">$450</p>
+</div>
+<button class="bg-primary hover:bg-primary-dark text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors">
+                                    Book
+                                </button>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="min-w-[260px] snap-center bg-surface-light dark:bg-surface-dark rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
+<div class="h-32 bg-gray-200 relative">
+<img class="w-full h-full object-cover" data-alt="Neon street signs in Tokyo at night" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMXXf0FzAl04WuGvAbUv6rZtxKbfswwCXoQzeoi0-G4fOM1W1TPO-KeAeatYHmZcDvmPxFK57TnAtKdjCwfVI5xeuERHRchY7RJhf6_y6bcH-stHNuZ9poSUYRx8b8CmgKg632ELOTcPPeJouQaDaPTkoggoqvajYAb_393FbCEx1shrpF_Po3xgbfVNUUb2DAfGirtID0L96TPxJF8gCOzTsEF7ICZbDofDUQ_XhLrx--7_O9xOb3-JvTmRNOI7GrwFVCdDjwlqw"/>
+<div class="absolute top-2 right-2 bg-white/90 dark:bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg text-xs font-bold text-text-main dark:text-white flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-yellow-500">star</span>
+                                4.9
+                            </div>
+</div>
+<div class="p-3">
+<div class="flex justify-between items-start mb-1">
+<div>
+<h4 class="font-bold text-text-main dark:text-white">Tokyo, Japan</h4>
+<p class="text-xs text-text-sub">Round Trip • Economy</p>
+</div>
+<div class="bg-primary/10 p-1.5 rounded-lg">
+<span class="material-symbols-outlined text-primary text-[20px]">flight</span>
+</div>
+</div>
+<div class="flex items-end justify-between mt-3">
+<div>
+<p class="text-xs text-text-sub line-through">$1,200</p>
+<p class="text-lg font-bold text-primary">$890</p>
+</div>
+<button class="bg-primary hover:bg-primary-dark text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors">
+                                    Book
+                                </button>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="min-w-[260px] snap-center bg-surface-light dark:bg-surface-dark rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
+<div class="h-32 bg-gray-200 relative">
+<img class="w-full h-full object-cover" data-alt="Modern buildings and canals in Dubai" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1TVOYd2B_COukDPnX503dWdfJImLnw2GpgeAOqL4tQDKX1QkCXrbSvRf0ugDJNRgrQe4Q9hNWF16XtBU3ykF2z_AkmZ0l7lZHAfgdurb-XVlMYnrw9Nj0V9Z38cvAKabT0r9k6RvRi4Luu3wLztX4BCdQlxxkiivdYdwlFne9StpAuy3byVdlGKc6laXk5L_PdD2roMdbxLmov53Qb_u5HJlkwvsOGgV9W90GnxMp13RdGWCPLCNQgCD7PIu1B5V8za5F1RXnKEk"/>
+<div class="absolute top-2 right-2 bg-white/90 dark:bg-black/60 backdrop-blur-md px-2 py-1 rounded-lg text-xs font-bold text-text-main dark:text-white flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-yellow-500">star</span>
+                                4.7
+                            </div>
+</div>
+<div class="p-3">
+<div class="flex justify-between items-start mb-1">
+<div>
+<h4 class="font-bold text-text-main dark:text-white">Dubai, UAE</h4>
+<p class="text-xs text-text-sub">Round Trip • Business</p>
+</div>
+<div class="bg-primary/10 p-1.5 rounded-lg">
+<span class="material-symbols-outlined text-primary text-[20px]">flight</span>
+</div>
+</div>
+<div class="flex items-end justify-between mt-3">
+<div>
+<p class="text-xs text-text-sub line-through">$950</p>
+<p class="text-lg font-bold text-primary">$720</p>
+</div>
+<button class="bg-primary hover:bg-primary-dark text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors">
+                                    Book
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Searches Section (Optional Filler) -->
+<div class="mt-2 px-5 pb-6">
+<h3 class="text-lg font-bold text-text-main dark:text-white mb-4">Recent Searches</h3>
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-4 bg-white dark:bg-surface-dark p-3 rounded-xl border border-gray-100 dark:border-gray-700">
+<div class="size-10 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-text-sub">
+<span class="material-symbols-outlined">history</span>
+</div>
+<div class="flex-1">
+<p class="font-bold text-sm text-text-main dark:text-white">Boston <span class="text-text-sub font-normal">to</span> Miami</p>
+<p class="text-xs text-text-sub">24 Oct • 1 Passenger</p>
+</div>
+<span class="material-symbols-outlined text-primary">arrow_forward_ios</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-surface-light dark:bg-surface-dark border-t border-gray-200 dark:border-gray-800 pb-safe">
+<div class="flex justify-around items-center h-16">
+<a class="flex flex-col items-center gap-1 w-16 text-primary" href="#">
+<span class="material-symbols-outlined fill-current">home</span>
+<span class="text-[10px] font-bold">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 w-16 text-text-sub hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">airplane_ticket</span>
+<span class="text-[10px] font-medium">My Trips</span>
+</a>
+<a class="flex flex-col items-center gap-1 w-16 text-text-sub hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">local_offer</span>
+<span class="text-[10px] font-medium">Offers</span>
+</a>
+<a class="flex flex-col items-center gap-1 w-16 text-text-sub hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Account</span>
+</a>
+</div>
+</nav>
+</div>
+</body></html>
