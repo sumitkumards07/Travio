@@ -157,13 +157,51 @@ export const getRedBusLink = (origin, destination, date = null) => {
     return `https://www.redbus.in/bus-tickets/${o}-to-${d}?date=${dateStr}`;
 };
 
+// AbhiBus City IDs (required for their URL)
+const ABHIBUS_CITY_IDS = {
+    'Delhi': '344',
+    'New Delhi': '344',
+    'Mumbai': '355',
+    'Bengaluru': '124',
+    'Bangalore': '124',
+    'Hyderabad': '73',
+    'Chennai': '181',
+    'Kolkata': '586',
+    'Pune': '1234',
+    'Ahmedabad': '15',
+    'Jaipur': '451',
+    'Lucknow': '703',
+    'Goa': '386',
+    'Chandigarh': '187',
+    'Dehradun': '233',
+    'Rishikesh': '1234',
+    'Haridwar': '408',
+    'Manali': '798',
+    'Shimla': '1412',
+    'Varanasi': '1607',
+    'Agra': '12',
+    'Amritsar': '43',
+    'Mysore': '875',
+    'Coimbatore': '203',
+    'Kochi': '552',
+    'Thiruvananthapuram': '1541',
+    'Vijayawada': '1623',
+    'Visakhapatnam': '1625',
+    'Nagpur': '886',
+    // Add more as needed
+};
+
 /**
  * Generate AbhiBus deep link
- * Pattern: /bus_search/src/dest/dd-mm-yyyy
+ * Pattern: /bus_search/FromCity/FromID/ToCity/ToID/dd-mm-yyyy/O
+ * Example: /bus_search/Narnaul/12476/Delhi/344/15-01-2026/O
  */
 export const getAbhiBusLink = (origin, destination, date = null) => {
-    const o = normalizeCity(getCityName(origin));
-    const d = normalizeCity(getCityName(destination));
+    const originName = getCityName(origin);
+    const destName = getCityName(destination);
+
+    const originId = ABHIBUS_CITY_IDS[originName] || ABHIBUS_CITY_IDS[origin];
+    const destId = ABHIBUS_CITY_IDS[destName] || ABHIBUS_CITY_IDS[destination];
 
     const dateObj = date ? new Date(date) : new Date(Date.now() + 86400000);
     const dd = String(dateObj.getDate()).padStart(2, '0');
@@ -171,7 +209,13 @@ export const getAbhiBusLink = (origin, destination, date = null) => {
     const yyyy = dateObj.getFullYear();
     const abhiDate = `${dd}-${mm}-${yyyy}`;
 
-    return `https://www.abhibus.com/bus_search/${o}/${d}/${abhiDate}`;
+    // If we have IDs, use the proper format
+    if (originId && destId) {
+        return `https://www.abhibus.com/bus_search/${originName}/${originId}/${destName}/${destId}/${abhiDate}/O`;
+    }
+
+    // Fallback to simpler URL format
+    return `https://www.abhibus.com/bus-tickets/${normalizeCity(originName)}-to-${normalizeCity(destName)}`;
 };
 
 /**
