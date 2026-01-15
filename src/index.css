@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 :root {
     --primary: #1f2937;
@@ -15,6 +13,7 @@
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
     --shadow-blue: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+    --shadow-emerald: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
 }
 
 * {
@@ -39,6 +38,7 @@ h6,
     font-family: var(--font-display);
 }
 
+/* Buttons */
 .btn-primary {
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     color: white;
@@ -51,6 +51,7 @@ h6,
     transform: scale(0.98);
 }
 
+/* Hide Scrollbar */
 .no-scrollbar::-webkit-scrollbar {
     display: none;
 }
@@ -58,4 +59,177 @@ h6,
 .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+}
+
+/* Glassmorphism */
+.glass {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-dark {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Animations */
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Animation Classes */
+.animate-shimmer {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slideUp {
+    animation: slideUp 0.4s ease-out;
+}
+
+.animate-scaleIn {
+    animation: scaleIn 0.2s ease-out;
+}
+
+/* Skeleton Loading */
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 8px;
+}
+
+/* Safe area padding for iOS */
+.pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* Card hover effects */
+.card-hover {
+    transition: all 0.2s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Gradient text */
+.text-gradient {
+    background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Input focus effects */
+input:focus,
+select:focus {
+    outline: none;
+}
+
+/* Custom checkbox */
+input[type="checkbox"] {
+    accent-color: #3b82f6;
+}
+
+/* Badge glow effects */
+.badge-glow {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+}
+
+/* Mode-specific gradients */
+.gradient-flight {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+}
+
+.gradient-train {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+}
+
+.gradient-bus {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+}
+
+.gradient-cab {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
 }
