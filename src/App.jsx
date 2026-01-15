@@ -4,6 +4,7 @@ import SearchHero from './components/SearchHero';
 import ResultCard from './components/ResultCard';
 import AiSuggestion from './components/AiSuggestion';
 import HotelCompareCard from './components/HotelCompareCard';
+import AiTravelPlanner from './components/AiTravelPlanner';
 import { Plane, Train, Bus, Car, ArrowLeft, Search, Filter, SlidersHorizontal, Sparkles, TrendingDown, MapPin, Building2 } from 'lucide-react';
 import { searchMockData, mockRoutes, cities, getCheapestPerMode } from './lib/mockData';
 import { findAiSuggestions } from './lib/aiLogic';
@@ -465,6 +466,11 @@ function App() {
         </div>
       )}
 
+      {/* AI Travel Planner View */}
+      {view === 'ai-planner' && (
+        <AiTravelPlanner />
+      )}
+
       {/* Bottom Navigation */}
       <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-100 pb-safe pt-2 px-6 shadow-[0_-5px_20px_rgba(0,0,0,0.05)] z-50">
         <div className="flex justify-between items-center max-w-md mx-auto h-16">
@@ -488,11 +494,14 @@ function App() {
             </div>
             <span className="text-[10px] font-bold">Hotels</span>
           </button>
-          <button className="flex flex-col items-center gap-1 text-gray-400">
-            <div className="p-2 rounded-xl">
+          <button
+            onClick={() => setView('ai-planner')}
+            className={`flex flex-col items-center gap-1 transition-colors ${view === 'ai-planner' ? 'text-purple-600' : 'text-gray-400'}`}
+          >
+            <div className={`p-2 rounded-xl ${view === 'ai-planner' ? 'bg-purple-50' : ''}`}>
               <Sparkles className="w-5 h-5" />
             </div>
-            <span className="text-[10px] font-bold">AI Picks</span>
+            <span className="text-[10px] font-bold">AI Planner</span>
           </button>
           <button className="flex flex-col items-center gap-1 text-gray-400">
             <div className="p-2 rounded-xl">
