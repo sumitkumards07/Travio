@@ -175,17 +175,30 @@ export const getAbhiBusLink = (origin, destination, date = null) => {
 };
 
 /**
- * Generate FlixBus deep link (uses city IDs)
- * Pattern: shop.flixbus.in/search?departureCity=ID&arrivalCity=ID&rideDate=dd.mm.yyyy
+ * Generate FlixBus deep link (uses REAL UUIDs, not fake numeric IDs)
+ * FlixBus requires 32-character UUIDs for their API
+ * Pattern: shop.flixbus.in/search?departureCity=UUID&arrivalCity=UUID&rideDate=dd.mm.yyyy
  */
 export const getFlixBusLink = (origin, destination, date = null) => {
+    // Real UUIDs verified from FlixBus API
+    const REAL_UUIDS = {
+        'Delhi': 'a002c4a4-1eef-4afa-82d9-ecd690ea51c5',
+        'New Delhi': 'a002c4a4-1eef-4afa-82d9-ecd690ea51c5',
+        'Bengaluru': '2e46c6ce-d031-46f2-8ab5-e41038b8a029',
+        'Bangalore': '2e46c6ce-d031-46f2-8ab5-e41038b8a029',
+        'Hyderabad': '3da253ae-02ca-430c-87e5-22842065a77d',
+        'Chennai': '8c1ee239-185f-4f06-912b-5232d0b0489d',
+        'Dehradun': '52c74eb5-299b-4207-be30-1aad618958aa',
+        'Jaipur': 'b691e973-17a6-4c67-a673-908062270b2f',
+    };
+
     const originName = getCityName(origin);
     const destName = getCityName(destination);
 
-    const originId = FLIXBUS_CITIES[originName] || FLIXBUS_CITIES[origin];
-    const destId = FLIXBUS_CITIES[destName] || FLIXBUS_CITIES[destination];
+    const originId = REAL_UUIDS[originName] || REAL_UUIDS[origin];
+    const destId = REAL_UUIDS[destName] || REAL_UUIDS[destination];
 
-    // If we don't have city IDs, fallback to homepage
+    // If we don't have REAL UUIDs, fallback to homepage
     if (!originId || !destId) {
         return 'https://www.flixbus.in/';
     }
@@ -196,7 +209,19 @@ export const getFlixBusLink = (origin, destination, date = null) => {
     const yyyy = dateObj.getFullYear();
     const flixDate = `${dd}.${mm}.${yyyy}`;
 
-    return `https://shop.flixbus.in/search?departureCity=${originId}&arrivalCity=${destId}&rideDate=${flixDate}`;
+    // Build URL with all required params for best experience
+    const params = new URLSearchParams({
+        departureCity: originId,
+        arrivalCity: destId,
+        route: `${originName}-${destName}`,
+        rideDate: flixDate,
+        adult: '1',
+        _locale: 'en_IN',
+        departureCountryCode: 'IN',
+        arrivalCountryCode: 'IN'
+    });
+
+    return `https://shop.flixbus.in/search?${params.toString()}`;
 };
 
 /**
