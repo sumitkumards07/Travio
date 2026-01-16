@@ -14,6 +14,15 @@ export default defineConfig({
         headers: {
           'Origin': 'https://www.travelpayouts.com'
         }
+      },
+      // Proxy Aviasales API
+      '/api/aviasales': {
+        target: 'https://api.travelpayouts.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/aviasales/, ''),
+        headers: {
+          'Origin': 'https://www.aviasales.com'
+        }
       }
     }
   }

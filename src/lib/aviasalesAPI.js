@@ -5,9 +5,11 @@
 const API_TOKEN = import.meta.env.VITE_TRAVELPAYOUTS_TOKEN || '';
 const PARTNER_ID = import.meta.env.VITE_TRAVELPAYOUTS_MARKER || '';
 
-// Base URLs
-const FLIGHT_SEARCH_API = 'https://api.travelpayouts.com/aviasales/v3';
-const FLIGHT_DATA_API = 'https://api.travelpayouts.com/v2';
+// Base URLs - use proxy in dev to avoid CORS
+const isDev = import.meta.env.DEV;
+const FLIGHT_SEARCH_API = isDev ? '/api/aviasales/aviasales/v3' : 'https://api.travelpayouts.com/aviasales/v3';
+const FLIGHT_DATA_API = isDev ? '/api/aviasales/v2' : 'https://api.travelpayouts.com/v2';
+
 
 // IATA code mapping
 const CITY_TO_IATA = {
