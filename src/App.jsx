@@ -27,6 +27,7 @@ function App() {
   const [hotelResults, setHotelResults] = useState([]);
   const [selectedCity, setSelectedCity] = useState('');
   const [usingRealData, setUsingRealData] = useState(false);
+  const [stopsFilter, setStopsFilter] = useState('all'); // 'all', 'direct', '1stop', '2plus'
 
   const handleSearch = async (params) => {
     setLoading(true);
@@ -118,9 +119,21 @@ function App() {
   const getFromCity = () => cities.find(c => c.id === searchParams?.from);
   const getToCity = () => cities.find(c => c.id === searchParams?.to);
 
-  const filteredResults = activeMode === 'all'
-    ? results
-    : results.filter(r => r.mode === activeMode);
+  // Filter results by mode AND stops
+  const filteredResults = results.filter(r => {
+    // Mode filter
+    if (activeMode !== 'all' && r.mode !== activeMode) return false;
+
+    // Stops filter (only for flights)
+    if (r.mode === 'flight' && stopsFilter !== 'all') {
+      const stops = r.stops || 0;
+      if (stopsFilter === 'direct' && stops !== 0) return false;
+      if (stopsFilter === '1stop' && stops !== 1) return false;
+      if (stopsFilter === '2plus' && stops < 2) return false;
+    }
+
+    return true;
+  });
 
   const getResultsForMode = (mode) => results.filter(r => r.mode === mode);
 
@@ -311,7 +324,31 @@ function App() {
               <SlidersHorizontal className="w-3.5 h-3.5" />
               Filters
             </button>
-            {['Price', 'Duration', 'Departure'].map((f, i) => (
+
+            {/* Stops Filter - Only show for flights */}
+            {(activeMode === 'flight' || activeMode === 'all') && (
+              <>
+                {[
+                  { id: 'all', label: 'Any Stops' },
+                  { id: 'direct', label: 'Direct Only' },
+                  { id: '1stop', label: '1 Stop' },
+                  { id: '2plus', label: '2+ Stops' }
+                ].map((f) => (
+                  <button
+                    key={f.id}
+                    onClick={() => setStopsFilter(f.id)}
+                    className={`px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors ${stopsFilter === f.id
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-white border border-gray-200 text-gray-600 hover:border-blue-300'
+                      }`}
+                  >
+                    {f.label}
+                  </button>
+                ))}
+              </>
+            )}
+
+            {['Price', 'Duration'].map((f, i) => (
               <button
                 key={i}
                 className="px-3 py-2 rounded-xl text-xs font-bold whitespace-nowrap bg-white border border-gray-200 text-gray-600 hover:border-gray-300 transition-colors"
