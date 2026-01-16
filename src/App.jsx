@@ -38,38 +38,32 @@ function App() {
 
     let allResults = [];
 
-    // Try Aviasales API for real flight data first (Partner ID: 696077)
+    // Use ONLY Aviasales API for flights (Partner ID: 696077)
     if (params.mode === 'flight' || params.mode === 'all') {
       console.log('🔍 Searching Aviasales for flights...');
       try {
         const aviasalesResult = await searchFlightsReal(params.from, params.to, params.date);
-        if (aviasalesResult.usingRealData && aviasalesResult.flights.length > 0) {
-          console.log(`✅ Found ${aviasalesResult.flights.length} real flights from Aviasales`);
+        if (aviasalesResult.flights.length > 0) {
+          console.log(`✅ Found ${aviasalesResult.flights.length} flights from Aviasales`);
           allResults = [...aviasalesResult.flights];
-          setUsingRealData(true);
+          setUsingRealData(aviasalesResult.usingRealData);
         } else {
-          // Fallback to Amadeus test API
-          console.log('⚠️ Aviasales returned no data, trying Amadeus...');
-          const amadeusFlights = await searchFlightsAmadeus(params.from, params.to, params.date);
-          if (amadeusFlights && amadeusFlights.length > 0) {
-            console.log(`✅ Found ${amadeusFlights.length} flights from Amadeus`);
-            allResults = [...amadeusFlights];
-            setUsingRealData(true);
-          }
+          console.log('⚠️ Aviasales: No flights found for this route');
         }
       } catch (error) {
-        console.error('❌ Flight API error:', error);
+        console.error('❌ Aviasales API error:', error);
       }
     }
 
-    // Get mock data for other modes and as fallback
+    // Get mock data for other modes (train, bus, cab)
     const mockResults = await searchMockData(params.from, params.to, params.mode === 'flight' ? null : params.mode);
 
-    // If no Amadeus flights, use mock flights
-    if (allResults.length === 0 || params.mode !== 'flight') {
-      allResults = [...allResults, ...mockResults.filter(r =>
-        allResults.length === 0 || r.mode !== 'flight'
-      )];
+    // Add mock data for non-flight modes only
+    if (params.mode !== 'flight') {
+      allResults = [...allResults, ...mockResults.filter(r => r.mode !== 'flight')];
+    } else if (allResults.length === 0) {
+      // Only use mock flights if Aviasales returned nothing
+      allResults = mockResults.filter(r => r.mode === 'flight');
     }
 
     setResults(allResults);
