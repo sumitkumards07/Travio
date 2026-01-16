@@ -73,9 +73,24 @@ const ResultCard = ({ result, isCheapest, allProviders = [] }) => {
             {/* Header: Operator + Price */}
             <div className="flex justify-between items-start mb-4">
                 <div className="flex items-center gap-3">
-                    <div className={`w-11 h-11 bg-gradient-to-br ${getModeColor(result.mode)} rounded-xl flex items-center justify-center text-white shadow-md`}>
-                        {getIcon(result.mode)}
-                    </div>
+                    {/* Airline Logo for Flights */}
+                    {result.mode === 'flight' && result.airlineCode ? (
+                        <div className="w-11 h-11 bg-white rounded-xl flex items-center justify-center border border-gray-100 shadow-sm overflow-hidden">
+                            <img
+                                src={`https://pics.avs.io/80/80/${result.airlineCode}.png`}
+                                alt={result.operator}
+                                className="w-10 h-10 object-contain"
+                                onError={(e) => {
+                                    e.target.style.display = 'none';
+                                    e.target.parentElement.innerHTML = '<span class="text-xs font-bold text-gray-400">' + result.airlineCode + '</span>';
+                                }}
+                            />
+                        </div>
+                    ) : (
+                        <div className={`w-11 h-11 bg-gradient-to-br ${getModeColor(result.mode)} rounded-xl flex items-center justify-center text-white shadow-md`}>
+                            {getIcon(result.mode)}
+                        </div>
+                    )}
                     <div>
                         <h3 className="text-sm font-bold text-gray-900">{result.operator}</h3>
                         <p className="text-[10px] text-gray-400 font-medium">
@@ -87,7 +102,10 @@ const ResultCard = ({ result, isCheapest, allProviders = [] }) => {
                     </div>
                 </div>
                 <div className="text-right">
-                    <div className="text-xl font-bold text-gray-900">₹{result.price.toLocaleString()}</div>
+                    <div className="text-xl font-bold text-gray-900">
+                        {result.mode === 'flight' && <span className="text-xs font-medium text-gray-400">from </span>}
+                        ₹{result.price.toLocaleString()}
+                    </div>
                     <p className="text-[10px] text-gray-400">per person</p>
                 </div>
             </div>
@@ -215,8 +233,8 @@ const ResultCard = ({ result, isCheapest, allProviders = [] }) => {
                                 target="_blank"
                                 rel="noreferrer"
                                 className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs transition-all ${link.highlight
-                                        ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md hover:shadow-lg'
-                                        : 'bg-white hover:bg-gray-50 border border-gray-100 text-gray-700'
+                                    ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md hover:shadow-lg'
+                                    : 'bg-white hover:bg-gray-50 border border-gray-100 text-gray-700'
                                     }`}
                             >
                                 <span>{link.logo}</span>
