@@ -311,6 +311,29 @@ function App() {
                   <AiSuggestion suggestion={aiSuggestion} />
                 )}
 
+                {/* See All Flights on Aviasales Banner */}
+                {(activeMode === 'flight' || activeMode === 'all') && searchParams && (
+                  <a
+                    href={`https://www.aviasales.com/search/${searchParams.from}${(searchParams.date || new Date(Date.now() + 86400000).toISOString().split('T')[0]).replace(/-/g, '').slice(2, 8)}${searchParams.to}1?marker=696077`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="block bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl p-4 mb-4 hover:from-orange-600 hover:to-amber-600 transition-all shadow-lg shadow-orange-500/20"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-md">
+                        <Plane className="w-6 h-6 text-orange-500" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-white font-bold text-sm">See All Flights on Aviasales</div>
+                        <div className="text-orange-100 text-xs">View 50+ options • Compare all airlines • Best prices</div>
+                      </div>
+                      <div className="bg-white/20 rounded-full px-3 py-1.5 text-white text-xs font-bold">
+                        Go →
+                      </div>
+                    </div>
+                  </a>
+                )}
+
                 {/* Results Count */}
                 {filteredResults.length > 0 && (
                   <div className="flex items-center justify-between mb-3">
