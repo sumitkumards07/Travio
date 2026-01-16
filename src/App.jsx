@@ -10,7 +10,9 @@ import { searchMockData, mockRoutes, cities, getCheapestPerMode } from './lib/mo
 import { findAiSuggestions } from './lib/aiLogic';
 import { hotels, getHotelsWithBestPrices, hotelProviders } from './lib/hotelData';
 import { searchHotels } from './lib/hotelAPI';
-import { searchFlights, searchHotelsAmadeus } from './lib/amadeusAPI';
+import { searchFlights as searchFlightsAmadeus, searchHotelsAmadeus } from './lib/amadeusAPI';
+import { searchFlightsReal, searchCheapestFlights } from './lib/aviasalesAPI';
+
 
 
 function App() {
@@ -36,14 +38,27 @@ function App() {
 
     let allResults = [];
 
-    // Try Amadeus API for real flight data first
+    // Try Aviasales API for real flight data first (Partner ID: 696077)
     if (params.mode === 'flight' || params.mode === 'all') {
-      console.log('🔍 Searching Amadeus for flights...');
-      const amadeusFlights = await searchFlights(params.from, params.to, params.date);
-      if (amadeusFlights && amadeusFlights.length > 0) {
-        console.log(`✅ Found ${amadeusFlights.length} real flights from Amadeus`);
-        allResults = [...amadeusFlights];
-        setUsingRealData(true);
+      console.log('🔍 Searching Aviasales for flights...');
+      try {
+        const aviasalesResult = await searchFlightsReal(params.from, params.to, params.date);
+        if (aviasalesResult.usingRealData && aviasalesResult.flights.length > 0) {
+          console.log(`✅ Found ${aviasalesResult.flights.length} real flights from Aviasales`);
+          allResults = [...aviasalesResult.flights];
+          setUsingRealData(true);
+        } else {
+          // Fallback to Amadeus test API
+          console.log('⚠️ Aviasales returned no data, trying Amadeus...');
+          const amadeusFlights = await searchFlightsAmadeus(params.from, params.to, params.date);
+          if (amadeusFlights && amadeusFlights.length > 0) {
+            console.log(`✅ Found ${amadeusFlights.length} flights from Amadeus`);
+            allResults = [...amadeusFlights];
+            setUsingRealData(true);
+          }
+        }
+      } catch (error) {
+        console.error('❌ Flight API error:', error);
       }
     }
 
