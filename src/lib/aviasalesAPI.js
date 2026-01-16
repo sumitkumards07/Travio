@@ -73,8 +73,8 @@ export const searchCheapestFlights = async (origin, destination, departDate = nu
     console.log('🛫 Aviasales API call:', { origin, destination, originIATA, destIATA, depart, token: API_TOKEN ? 'SET' : 'MISSING' });
 
     // Parameters based on official docs:
-    // limit=30 (max 1000), sorting=price, market=in (India), direct=false (include connecting)
-    const apiUrl = `${FLIGHT_SEARCH_API}/prices_for_dates?origin=${originIATA}&destination=${destIATA}&departure_at=${depart}&currency=inr&limit=30&sorting=price&direct=false&market=in&token=${API_TOKEN}`;
+    // limit=50 (max 1000), sorting=price, market=in (India), direct=false (include connecting)
+    const apiUrl = `${FLIGHT_SEARCH_API}/prices_for_dates?origin=${originIATA}&destination=${destIATA}&departure_at=${depart}&currency=inr&limit=50&sorting=price&direct=false&market=in&token=${API_TOKEN}`;
     console.log('📡 API URL:', apiUrl);
 
     try {
