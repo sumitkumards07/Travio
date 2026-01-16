@@ -65,17 +65,21 @@ const getIATACode = (city) => {
 export const searchCheapestFlights = async (origin, destination, departDate = null) => {
     const originIATA = getIATACode(origin);
     const destIATA = getIATACode(destination);
-    const depart = departDate || new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0];
+
+    // Default to tomorrow if no date
+    const depart = departDate || new Date(Date.now() + 86400000).toISOString().split('T')[0];
+
+    console.log('🛫 Aviasales API call:', { origin, destination, originIATA, destIATA, depart, token: API_TOKEN ? 'SET' : 'MISSING' });
+
+    const apiUrl = `${FLIGHT_SEARCH_API}/prices_for_dates?origin=${originIATA}&destination=${destIATA}&departure_at=${depart}&currency=inr&token=${API_TOKEN}`;
+    console.log('📡 API URL:', apiUrl);
 
     try {
-        const response = await fetch(
-            `${FLIGHT_SEARCH_API}/prices_for_dates?origin=${originIATA}&destination=${destIATA}&departure_at=${depart}&currency=inr&token=${API_TOKEN}`,
-            {
-                headers: {
-                    'Accept': 'application/json',
-                }
+        const response = await fetch(apiUrl, {
+            headers: {
+                'Accept': 'application/json',
             }
-        );
+        });
 
         if (!response.ok) {
             throw new Error(`API error: ${response.status}`);
