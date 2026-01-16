@@ -1,7 +1,9 @@
-import { Plane, Train, Bus, Car, ExternalLink, Clock, Zap, TrendingUp } from 'lucide-react';
+import { Plane, Train, Bus, Car, ExternalLink, Clock, Zap, TrendingUp, AlertCircle } from 'lucide-react';
 import { providers } from '../lib/mockData';
 import { getFlightComparisonLinks } from '../lib/flightAffiliates';
 import { getBusComparisonLinks, isFlixBusRoute } from '../lib/busComparison';
+import { getCabComparisonLinks } from '../lib/cabComparison';
+import { airHelpService } from '../lib/flightEngine';
 
 const ResultCard = ({ result, isCheapest, allProviders = [] }) => {
     const getIcon = (mode) => {
@@ -49,6 +51,11 @@ const ResultCard = ({ result, isCheapest, allProviders = [] }) => {
     // Get bus comparison links (FlixBus, RedBus, AbhiBus)
     const busLinks = result.mode === 'bus'
         ? getBusComparisonLinks(result.from, result.to)
+        : [];
+
+    // Get cab comparison links (GetTransfer, Kiwitaxi, Welcome Pickups)
+    const cabLinks = result.mode === 'cab'
+        ? getCabComparisonLinks(result.from, result.to)
         : [];
 
     return (
@@ -169,8 +176,8 @@ const ResultCard = ({ result, isCheapest, allProviders = [] }) => {
                                 target="_blank"
                                 rel="noreferrer"
                                 className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs transition-all ${link.provider === 'flixbus'
-                                        ? 'bg-gradient-to-r from-green-500 to-lime-500 text-white shadow-md hover:shadow-lg'
-                                        : 'bg-white hover:bg-gray-50 border border-gray-100 text-gray-700'
+                                    ? 'bg-gradient-to-r from-green-500 to-lime-500 text-white shadow-md hover:shadow-lg'
+                                    : 'bg-white hover:bg-gray-50 border border-gray-100 text-gray-700'
                                     }`}
                             >
                                 <span>{link.logo}</span>
@@ -188,6 +195,66 @@ const ResultCard = ({ result, isCheapest, allProviders = [] }) => {
                         💡 Tip: FlixBus is also on RedBus, but direct booking often saves ₹20-50!
                     </p>
                 </div>
+            )}
+
+            {/* Cab Compare Section (GetTransfer, Kiwitaxi, Welcome Pickups) */}
+            {result.mode === 'cab' && cabLinks.length > 0 && (
+                <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl p-3 mb-3">
+                    <div className="flex items-center gap-2 mb-2">
+                        <Car className="w-4 h-4 text-emerald-600" />
+                        <span className="text-xs font-bold text-emerald-900">Compare Cab Prices</span>
+                        <span className="text-[8px] bg-emerald-200 text-emerald-700 px-1.5 py-0.5 rounded-full font-bold ml-auto">
+                            💰 Earn 9-11% Commission
+                        </span>
+                    </div>
+                    <div className="flex gap-2 overflow-x-auto no-scrollbar">
+                        {cabLinks.map((link, idx) => (
+                            <a
+                                key={idx}
+                                href={link.link}
+                                target="_blank"
+                                rel="noreferrer"
+                                className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs transition-all ${link.highlight
+                                        ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md hover:shadow-lg'
+                                        : 'bg-white hover:bg-gray-50 border border-gray-100 text-gray-700'
+                                    }`}
+                            >
+                                <span>{link.logo}</span>
+                                <div className="flex flex-col">
+                                    <span className="font-semibold">{link.name}</span>
+                                    {link.badge && (
+                                        <span className="text-[9px] opacity-90">{link.badge}</span>
+                                    )}
+                                </div>
+                                <ExternalLink className="w-3 h-3" />
+                            </a>
+                        ))}
+                    </div>
+                    <p className="text-[9px] text-emerald-600 mt-2 opacity-80">
+                        🚗 GetTransfer: Drivers bid for your trip • Kiwitaxi: Fixed prices
+                    </p>
+                </div>
+            )}
+
+            {/* AirHelp Compensation Banner (for flights) */}
+            {result.mode === 'flight' && (
+                <a
+                    href={airHelpService.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="block bg-gradient-to-r from-red-50 to-orange-50 rounded-xl p-3 mb-3 hover:from-red-100 hover:to-orange-100 transition-all"
+                >
+                    <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white text-sm">
+                            🆘
+                        </div>
+                        <div className="flex-1">
+                            <div className="text-xs font-bold text-red-900">Flight Delayed or Cancelled?</div>
+                            <div className="text-[10px] text-red-700">Get up to ₹50,000 compensation • Check free</div>
+                        </div>
+                        <ExternalLink className="w-4 h-4 text-red-400" />
+                    </div>
+                </a>
             )}
 
             {/* Other Provider Prices (if available) */}
