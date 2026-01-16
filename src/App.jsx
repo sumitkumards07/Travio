@@ -11,7 +11,7 @@ import { findAiSuggestions } from './lib/aiLogic';
 import { hotels, getHotelsWithBestPrices, hotelProviders } from './lib/hotelData';
 import { searchHotels } from './lib/hotelAPI';
 import { searchFlights as searchFlightsAmadeus, searchHotelsAmadeus } from './lib/amadeusAPI';
-import { searchFlightsReal, searchCheapestFlights } from './lib/aviasalesAPI';
+import { searchFlightsReal, searchCheapestFlights, getComprehensiveFlights } from './lib/aviasalesAPI';
 
 
 
@@ -38,17 +38,18 @@ function App() {
 
     let allResults = [];
 
-    // Use ONLY Aviasales API for flights (Partner ID: 696077)
+    // Use Aviasales API for COMPREHENSIVE flight comparison (3 endpoints)
     if (params.mode === 'flight' || params.mode === 'all') {
-      console.log('🔍 Searching Aviasales for flights...');
+      console.log('🔍 Comprehensive flight search from Aviasales...');
       try {
-        const aviasalesResult = await searchFlightsReal(params.from, params.to, params.date);
-        if (aviasalesResult.flights.length > 0) {
-          console.log(`✅ Found ${aviasalesResult.flights.length} flights from Aviasales`);
-          allResults = [...aviasalesResult.flights];
-          setUsingRealData(aviasalesResult.usingRealData);
+        // Fetches from: prices_for_dates, prices/cheap, prices/direct
+        const flightResult = await getComprehensiveFlights(params.from, params.to, params.date);
+        if (flightResult.success && flightResult.flights.length > 0) {
+          console.log(`✅ Found ${flightResult.flights.length} flights from ${flightResult.totalSources} sources`);
+          allResults = [...flightResult.flights];
+          setUsingRealData(true);
         } else {
-          console.log('⚠️ Aviasales: No flights found for this route');
+          console.log('⚠️ No flights found in Aviasales cache for this route');
         }
       } catch (error) {
         console.error('❌ Aviasales API error:', error);

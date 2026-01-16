@@ -244,17 +244,196 @@ export const searchFlightsReal = async (origin, destination, departDate = null, 
                 from: origin,
                 to: destination,
                 price: f.price,
-                duration: calculateDuration(f.departureAt, f.returnAt) || '2h 30m',
+                duration: f.duration ? `${Math.floor(f.duration / 60)}h ${f.duration % 60}m` : '2h 30m',
                 startTime: new Date(f.departureAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
-                endTime: new Date(new Date(f.departureAt).getTime() + 2.5 * 60 * 60 * 1000).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+                endTime: new Date(new Date(f.departureAt).getTime() + (f.duration || 150) * 60 * 1000).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
                 stops: f.transfers || 0,
-                bookingLink: f.link
+                bookingLink: f.link,
+                airline: f.airline,
+                flightNumber: f.flightNumber,
+                departureAt: f.departureAt
             }))
         };
     }
 
     console.log('⚠️ No real data, using mock fallback');
     return { source: 'mock', usingRealData: false, flights: [] };
+};
+
+/**
+ * Fetch cheapest tickets from /v1/prices/cheap endpoint
+ * Returns cheapest non-stop, 1-stop, and 2-stop tickets
+ */
+export const fetchCheapTickets = async (origin, destination, departMonth = null) => {
+    const originIATA = getIATACode(origin);
+    const destIATA = getIATACode(destination);
+    const month = departMonth || new Date().toISOString().slice(0, 7); // YYYY-MM
+
+    try {
+        const response = await fetch(
+            `${isDev ? '/api/aviasales/v1' : 'https://api.travelpayouts.com/v1'}/prices/cheap?origin=${originIATA}&destination=${destIATA}&depart_date=${month}&currency=inr&token=${API_TOKEN}`
+        );
+
+        if (!response.ok) return { success: false, tickets: {} };
+
+        const data = await response.json();
+        if (data.success && data.data && data.data[destIATA]) {
+            return { success: true, tickets: data.data[destIATA] };
+        }
+        return { success: false, tickets: {} };
+    } catch (error) {
+        console.error('Cheap tickets API error:', error);
+        return { success: false, tickets: {} };
+    }
+};
+
+/**
+ * Fetch direct/non-stop flights only
+ */
+export const fetchDirectFlights = async (origin, destination, departMonth = null) => {
+    const originIATA = getIATACode(origin);
+    const destIATA = getIATACode(destination);
+    const month = departMonth || new Date().toISOString().slice(0, 7);
+
+    try {
+        const response = await fetch(
+            `${isDev ? '/api/aviasales/v1' : 'https://api.travelpayouts.com/v1'}/prices/direct?origin=${originIATA}&destination=${destIATA}&depart_date=${month}&currency=inr&token=${API_TOKEN}`
+        );
+
+        if (!response.ok) return { success: false, tickets: {} };
+
+        const data = await response.json();
+        if (data.success && data.data && data.data[destIATA]) {
+            return { success: true, tickets: data.data[destIATA] };
+        }
+        return { success: false, tickets: {} };
+    } catch (error) {
+        console.error('Direct flights API error:', error);
+        return { success: false, tickets: {} };
+    }
+};
+
+/**
+ * COMPREHENSIVE FLIGHT COMPARISON
+ * Fetches from multiple endpoints and combines results for in-app display
+ */
+export const getComprehensiveFlights = async (origin, destination, departDate = null) => {
+    const originIATA = getIATACode(origin);
+    const destIATA = getIATACode(destination);
+    const depart = departDate || new Date(Date.now() + 86400000).toISOString().split('T')[0];
+    const departMonth = depart.slice(0, 7);
+
+    console.log('✈️ Comprehensive flight search:', originIATA, '→', destIATA);
+
+    const allFlights = [];
+    const seenPrices = new Set(); // Deduplicate by price+airline
+
+    // 1. Fetch from prices_for_dates (main endpoint)
+    try {
+        const pricesResult = await searchCheapestFlights(origin, destination, depart);
+        if (pricesResult.success) {
+            pricesResult.flights.forEach(f => {
+                const key = `${f.price}-${f.airline}`;
+                if (!seenPrices.has(key)) {
+                    seenPrices.add(key);
+                    allFlights.push({
+                        ...f,
+                        source: 'prices_for_dates'
+                    });
+                }
+            });
+        }
+    } catch (e) { console.error('prices_for_dates error:', e); }
+
+    // 2. Fetch from v1/prices/cheap (cheapest per stop type)
+    try {
+        const cheapResult = await fetchCheapTickets(origin, destination, departMonth);
+        if (cheapResult.success) {
+            Object.entries(cheapResult.tickets).forEach(([stops, ticket]) => {
+                const key = `${ticket.price}-${ticket.airline}`;
+                if (!seenPrices.has(key)) {
+                    seenPrices.add(key);
+                    allFlights.push({
+                        price: ticket.price,
+                        airline: ticket.airline,
+                        flightNumber: ticket.flight_number,
+                        departureAt: ticket.departure_at,
+                        returnAt: ticket.return_at,
+                        transfers: parseInt(stops),
+                        origin: originIATA,
+                        destination: destIATA,
+                        link: generateBookingLink(originIATA, destIATA, depart),
+                        source: 'prices_cheap'
+                    });
+                }
+            });
+        }
+    } catch (e) { console.error('prices_cheap error:', e); }
+
+    // 3. Fetch direct flights separately
+    try {
+        const directResult = await fetchDirectFlights(origin, destination, departMonth);
+        if (directResult.success) {
+            Object.entries(directResult.tickets).forEach(([stops, ticket]) => {
+                const key = `${ticket.price}-${ticket.airline}`;
+                if (!seenPrices.has(key)) {
+                    seenPrices.add(key);
+                    allFlights.push({
+                        price: ticket.price,
+                        airline: ticket.airline,
+                        flightNumber: ticket.flight_number,
+                        departureAt: ticket.departure_at,
+                        transfers: 0,
+                        origin: originIATA,
+                        destination: destIATA,
+                        link: generateBookingLink(originIATA, destIATA, depart),
+                        source: 'prices_direct',
+                        isDirect: true
+                    });
+                }
+            });
+        }
+    } catch (e) { console.error('prices_direct error:', e); }
+
+    // Sort by price
+    allFlights.sort((a, b) => a.price - b.price);
+
+    console.log(`✅ Found ${allFlights.length} unique flights from ${new Set(allFlights.map(f => f.source)).size} sources`);
+
+    return {
+        success: allFlights.length > 0,
+        flights: allFlights.map(f => ({
+            id: `${f.airline}-${f.flightNumber || Math.random().toString(36).substr(2, 6)}`,
+            mode: 'flight',
+            operator: getAirlineName(f.airline),
+            airlineCode: f.airline,
+            from: origin,
+            to: destination,
+            price: f.price,
+            duration: f.duration ? `${Math.floor(f.duration / 60)}h ${f.duration % 60}m` : estimateDuration(originIATA, destIATA),
+            startTime: f.departureAt ? new Date(f.departureAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) : '06:00',
+            endTime: f.departureAt ? new Date(new Date(f.departureAt).getTime() + 2.5 * 60 * 60 * 1000).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) : '08:30',
+            stops: f.transfers || 0,
+            isDirect: f.transfers === 0,
+            bookingLink: f.link,
+            source: f.source
+        })),
+        totalSources: new Set(allFlights.map(f => f.source)).size,
+        cheapest: allFlights[0]?.price
+    };
+};
+
+// Estimate flight duration based on common routes
+const estimateDuration = (origin, dest) => {
+    const durations = {
+        'DEL-BOM': '2h 10m', 'BOM-DEL': '2h 10m',
+        'DEL-BLR': '2h 45m', 'BLR-DEL': '2h 45m',
+        'DEL-HYD': '2h 15m', 'HYD-DEL': '2h 15m',
+        'DEL-MAA': '2h 50m', 'MAA-DEL': '2h 50m',
+        'BOM-BLR': '1h 30m', 'BLR-BOM': '1h 30m',
+        'BOM-HYD': '1h 20m', 'HYD-BOM': '1h 20m',
+    };
+    return durations[`${origin}-${dest}`] || '2h 30m';
 };
 
 // Airline name mapping
