@@ -23,6 +23,15 @@ export default defineConfig({
         headers: {
           'Origin': 'https://www.aviasales.com'
         }
+      },
+      // Proxy Kiwi.com Tequila API
+      '/api/kiwi': {
+        target: 'https://api.tequila.kiwi.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/kiwi/, ''),
+        headers: {
+          'Origin': 'https://www.kiwi.com'
+        }
       }
     }
   }

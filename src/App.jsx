@@ -12,6 +12,7 @@ import { hotels, getHotelsWithBestPrices, hotelProviders } from './lib/hotelData
 import { searchHotels } from './lib/hotelAPI';
 import { searchFlights as searchFlightsAmadeus, searchHotelsAmadeus } from './lib/amadeusAPI';
 import { searchFlightsReal, searchCheapestFlights, getComprehensiveFlights } from './lib/aviasalesAPI';
+import { searchKiwiFlights, getCombinedFlights } from './lib/kiwiAPI';
 
 
 
@@ -38,21 +39,44 @@ function App() {
 
     let allResults = [];
 
-    // Use Aviasales API for COMPREHENSIVE flight comparison (3 endpoints)
+    // Search flights from BOTH APIs: Kiwi (live) + Aviasales (cached)
     if (params.mode === 'flight' || params.mode === 'all') {
-      console.log('🔍 Comprehensive flight search from Aviasales...');
+      console.log('🔍 Searching flights from Kiwi.com + Aviasales...');
+
+      let kiwiFlights = [];
+      let aviasalesFlights = [];
+
+      // 1. Try Kiwi.com first (real-time prices)
       try {
-        // Fetches from: prices_for_dates, prices/cheap, prices/direct
-        const flightResult = await getComprehensiveFlights(params.from, params.to, params.date);
-        if (flightResult.success && flightResult.flights.length > 0) {
-          console.log(`✅ Found ${flightResult.flights.length} flights from ${flightResult.totalSources} sources`);
-          allResults = [...flightResult.flights];
-          setUsingRealData(true);
-        } else {
-          console.log('⚠️ No flights found in Aviasales cache for this route');
+        const kiwiResult = await searchKiwiFlights(params.from, params.to, params.date);
+        if (kiwiResult.success && kiwiResult.flights.length > 0) {
+          console.log(`✅ Kiwi.com: Found ${kiwiResult.flights.length} live flights`);
+          kiwiFlights = kiwiResult.flights;
         }
       } catch (error) {
-        console.error('❌ Aviasales API error:', error);
+        console.error('❌ Kiwi.com error:', error);
+      }
+
+      // 2. Also fetch from Aviasales (cached prices - 3 endpoints)
+      try {
+        const aviasalesResult = await getComprehensiveFlights(params.from, params.to, params.date);
+        if (aviasalesResult.success && aviasalesResult.flights.length > 0) {
+          console.log(`✅ Aviasales: Found ${aviasalesResult.flights.length} cached flights`);
+          aviasalesFlights = aviasalesResult.flights;
+        }
+      } catch (error) {
+        console.error('❌ Aviasales error:', error);
+      }
+
+      // 3. Combine and deduplicate (Kiwi live prices take priority)
+      const combinedFlights = await getCombinedFlights(kiwiFlights, aviasalesFlights);
+
+      if (combinedFlights.length > 0) {
+        console.log(`✅ Total: ${combinedFlights.length} unique flights (Kiwi: ${kiwiFlights.length}, Aviasales: ${aviasalesFlights.length})`);
+        allResults = combinedFlights;
+        setUsingRealData(kiwiFlights.length > 0);
+      } else {
+        console.log('⚠️ No flights found from any source');
       }
     }
 
