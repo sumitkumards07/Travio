@@ -60,7 +60,8 @@ const getIATACode = (city) => {
 
 /**
  * Search for cheapest flights (Prices API - cached data)
- * Good for showing "Flights from ₹X" indicators
+ * Docs: https://support.travelpayouts.com/hc/en-us/articles/203956163-Aviasales-Data-API
+ * Returns cached prices from last 48 hours of user searches
  */
 export const searchCheapestFlights = async (origin, destination, departDate = null) => {
     const originIATA = getIATACode(origin);
@@ -71,7 +72,9 @@ export const searchCheapestFlights = async (origin, destination, departDate = nu
 
     console.log('🛫 Aviasales API call:', { origin, destination, originIATA, destIATA, depart, token: API_TOKEN ? 'SET' : 'MISSING' });
 
-    const apiUrl = `${FLIGHT_SEARCH_API}/prices_for_dates?origin=${originIATA}&destination=${destIATA}&departure_at=${depart}&currency=inr&token=${API_TOKEN}`;
+    // Parameters based on official docs:
+    // limit=30 (max 1000), sorting=price, market=in (India), direct=false (include connecting)
+    const apiUrl = `${FLIGHT_SEARCH_API}/prices_for_dates?origin=${originIATA}&destination=${destIATA}&departure_at=${depart}&currency=inr&limit=30&sorting=price&direct=false&market=in&token=${API_TOKEN}`;
     console.log('📡 API URL:', apiUrl);
 
     try {
