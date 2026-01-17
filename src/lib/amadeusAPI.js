@@ -1,5 +1,9 @@
 // Amadeus API Integration
 // Provides real flight and hotel data from 400+ airlines and 150,000+ hotels
+// Enhanced with 24-hour smart caching and quota management for the Look-to-Book strategy
+
+import { getCachedFlights, setCachedFlights } from './smartFlightCache.js';
+import { canMakeRequest, recordRequest } from './amadeusQuotaManager.js';
 
 const AMADEUS_API_KEY = import.meta.env.VITE_AMADEUS_API_KEY || '';
 const AMADEUS_API_SECRET = import.meta.env.VITE_AMADEUS_API_SECRET || '';
@@ -9,15 +13,14 @@ const AMADEUS_BASE_URL = 'https://test.api.amadeus.com'; // Use 'https://api.ama
 let accessToken = null;
 let tokenExpiry = null;
 
-// Rate limiting protection
+// Rate limiting protection (short-term, to prevent burst requests)
 let lastRequestTime = 0;
 const MIN_REQUEST_INTERVAL = 1000; // 1 second between requests
 let rateLimitedUntil = 0;
 
-// Results cache (avoid repeat API calls)
-const flightCache = new Map();
+// Hotel cache (still in-memory as hotels don't need 24h caching)
 const hotelCache = new Map();
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+const HOTEL_CACHE_TTL = 30 * 60 * 1000; // 30 minutes for hotels
 
 // Check if we're rate limited
 const isRateLimited = () => Date.now() < rateLimitedUntil;
@@ -80,7 +83,7 @@ const getAccessToken = async () => {
  * @returns {Promise<Array>} - Array of flight offers
  */
 export const searchFlights = async (origin, destination, departureDate = null, adults = 1) => {
-    // Check rate limit
+    // Check rate limit (burst protection)
     if (isRateLimited()) {
         console.log('⏳ Amadeus rate limited, using fallback');
         return null;
@@ -89,12 +92,18 @@ export const searchFlights = async (origin, destination, departureDate = null, a
     // Default to tomorrow if no date provided
     const date = departureDate || new Date(Date.now() + 86400000).toISOString().split('T')[0];
 
-    // Check cache first
-    const cacheKey = `flight:${origin}:${destination}:${date}:${adults}`;
-    const cached = flightCache.get(cacheKey);
-    if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
-        console.log('📦 Using cached flight results');
+    // Check 24-hour smart cache first (LOOK-TO-BOOK STRATEGY)
+    const cached = getCachedFlights(origin, destination, date);
+    if (cached) {
+        console.log('📦 [24H CACHE] Using cached flight results');
         return cached.data;
+    }
+
+    // Check monthly quota before making API call
+    const quotaCheck = canMakeRequest();
+    if (!quotaCheck.allowed) {
+        console.warn('🚫 [QUOTA] ' + quotaCheck.reason);
+        return null;
     }
 
     const token = await getAccessToken();
@@ -138,8 +147,12 @@ export const searchFlights = async (origin, destination, departureDate = null, a
         const data = await response.json();
         const results = transformFlightResults(data.data, data.dictionaries);
 
-        // Cache the results
-        flightCache.set(cacheKey, { data: results, timestamp: Date.now() });
+        // Record quota usage
+        recordRequest();
+
+        // Save to 24-hour smart cache (LOOK-TO-BOOK STRATEGY)
+        setCachedFlights(origin, destination, date, results);
+        console.log('✅ [AMADEUS] Fetched and cached ' + results.length + ' flights');
 
         return results;
     } catch (error) {

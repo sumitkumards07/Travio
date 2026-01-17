@@ -200,11 +200,18 @@ export const getAirlineInfo = async (iataCode) => {
 
 /**
  * Generate Aviasales booking link with affiliate tracking
+ * Format: https://www.aviasales.com/search/{ORIGIN}{DDMM}{DEST}1?marker={MARKER}
+ * This is the "BOOK" phase of the Look-to-Book strategy
  */
 export const generateBookingLink = (origin, destination, departDate, flightData = null) => {
-    const depart = departDate.replace(/-/g, '').slice(2, 8);
+    // Convert YYYY-MM-DD to DDMM format
+    // Example: 2026-05-20 → 2005 (20th May)
+    const dateObj = new Date(departDate);
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const aviasalesDate = `${day}${month}`; // DDMM format
 
-    let url = `https://www.aviasales.com/search/${origin}${depart}${destination}1`;
+    let url = `https://www.aviasales.com/search/${origin}${aviasalesDate}${destination}1`;
 
     if (PARTNER_ID) {
         url += `?marker=${PARTNER_ID}`;
@@ -212,6 +219,11 @@ export const generateBookingLink = (origin, destination, departDate, flightData 
 
     return url;
 };
+
+/**
+ * Generate deep link with correct DDMM format (alias for consistency)
+ */
+export const generateDeepLink = generateBookingLink;
 
 /**
  * Generate Kiwi.com link for comparison (virtual interlining)
