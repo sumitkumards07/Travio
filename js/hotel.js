@@ -256,6 +256,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     </div>
 </section>
         `;
+
+        if (hotel.name !== 'The Byke Heritage Hotel Matheran') {
+            const btnWa = document.getElementById('floating-wa');
+            const btnCall = document.getElementById('floating-call');
+            if (btnWa && btnWa.parentElement) btnWa.parentElement.style.display = 'none';
+            if (btnCall && btnCall.parentElement) btnCall.parentElement.style.display = 'none';
+        }
     } catch (err) {
         console.error('Error loading hotel:', err);
         content.innerHTML = '<div class="detail-loading">Error loading hotel details. <a href="index.html">Go back</a></div>';
