@@ -215,14 +215,14 @@ const TDB = (() => {
                 rating: 4.6, price_per_night: 3500, whatsapp_number: '918930176635',
                 amenities: ['WiFi', 'AC', 'Comfortable Bedding', 'Dining Facilities', 'Room Service'],
                 images: [
-                    'images/byke/unnamed-60.webp', 
-                    'images/byke/unnamed-59.webp', 
-                    'images/byke/unnamed-58.webp', 
-                    'images/byke/unnamed-57.webp', 
-                    'images/byke/unnamed-56.webp', 
-                    'images/byke/unnamed-55.webp', 
-                    'images/byke/unnamed-54.webp', 
-                    'images/byke/unnamed-52.webp'
+                    'https://cdn.jsdelivr.net/gh/sumitkumards07/Travio@main/images/byke/unnamed-60.webp', 
+                    'https://cdn.jsdelivr.net/gh/sumitkumards07/Travio@main/images/byke/unnamed-59.webp', 
+                    'https://cdn.jsdelivr.net/gh/sumitkumards07/Travio@main/images/byke/unnamed-58.webp', 
+                    'https://cdn.jsdelivr.net/gh/sumitkumards07/Travio@main/images/byke/unnamed-57.webp', 
+                    'https://cdn.jsdelivr.net/gh/sumitkumards07/Travio@main/images/byke/unnamed-56.webp', 
+                    'https://cdn.jsdelivr.net/gh/sumitkumards07/Travio@main/images/byke/unnamed-55.webp', 
+                    'https://cdn.jsdelivr.net/gh/sumitkumards07/Travio@main/images/byke/unnamed-54.webp', 
+                    'https://cdn.jsdelivr.net/gh/sumitkumards07/Travio@main/images/byke/unnamed-52.webp'
                 ],
                 category: 'Resort', is_active: true, created_at: new Date().toISOString()
             },
