@@ -7,21 +7,32 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const params = new URLSearchParams(window.location.search);
     const hotelId = params.get('id');
+    const hotelSlug = params.get('hotel');
     const content = document.getElementById('detail-content');
 
-    if (!hotelId) {
+    if (!hotelId && !hotelSlug) {
         content.innerHTML = '<div class="detail-loading">Hotel not found. <a href="index.html">Go back</a></div>';
         return;
     }
 
     try {
-        const hotel = await TDB.getHotelById(hotelId);
+        let hotel = null;
+        if (hotelId) {
+            hotel = await TDB.getHotelById(hotelId);
+        } else if (hotelSlug) {
+            const hotels = await TDB.getHotels();
+            hotel = hotels.find(h => {
+                const slug = h.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+                return slug === hotelSlug;
+            });
+        }
+
         if (!hotel) {
             content.innerHTML = '<div class="detail-loading">Hotel not found. <a href="index.html">Go back</a></div>';
             return;
         }
 
-        const rooms = await TDB.getRoomsByHotel(hotelId);
+        const rooms = await TDB.getRoomsByHotel(hotel.id);
 
         // Update page title
         document.title = `${hotel.name} — Travio`;

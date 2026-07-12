@@ -79,7 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function createHotelCard(hotel) {
         const card = document.createElement('a');
         card.className = 'travio-card';
-        card.href = `hotel.html?id=${hotel.id}`;
+        const slug = hotel.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+        card.href = `hotel.html?hotel=${slug}`;
         
         // Intercept click to append current dates and guests
         card.addEventListener('click', (e) => {
