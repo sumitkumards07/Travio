@@ -205,7 +205,7 @@ const TDB = (() => {
 
     // ── SEED DEMO DATA ──
     function seedDemoData() {
-        const DB_VERSION = '1.1';
+        const DB_VERSION = '1.2';
         if (localStorage.getItem('travio_db_version') !== DB_VERSION) {
             localStorage.removeItem('travio_hotels');
             localStorage.removeItem('travio_rooms');
@@ -232,54 +232,6 @@ const TDB = (() => {
                     'https://cdn.jsdelivr.net/gh/sumitkumards07/Travio@main/images/byke/unnamed-52.webp'
                 ],
                 category: 'Resort', is_active: true, created_at: new Date().toISOString()
-            },
-            {
-                id: uuid(), name: 'The Grand Palace Resort', location: 'Jaipur, Rajasthan',
-                description: 'Experience royal luxury in the heart of the Pink City. Our heritage property features stunning Rajasthani architecture, world-class amenities, and breathtaking views of the Aravalli hills.',
-                rating: 4.8, price_per_night: 8500, whatsapp_number: '919876543210',
-                amenities: ['WiFi', 'Pool', 'Spa', 'Restaurant', 'Parking', 'Room Service', 'Gym'],
-                images: ['https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800', 'https://images.unsplash.com/photo-1582719508461-905c673771eb?w=800', 'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800'],
-                category: 'Luxury', is_active: true, created_at: new Date().toISOString()
-            },
-            {
-                id: uuid(), name: 'Seaside Bliss Hotel', location: 'Goa, India',
-                description: 'Wake up to the sound of waves at our beachfront paradise. Just steps from the golden sands of Calangute beach, enjoy tropical vibes, fresh seafood, and spectacular sunsets.',
-                rating: 4.5, price_per_night: 5200, whatsapp_number: '919876543211',
-                amenities: ['WiFi', 'Pool', 'Beach Access', 'Restaurant', 'Bar', 'Water Sports'],
-                images: ['https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800', 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800', 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800'],
-                category: 'Resort', is_active: true, created_at: new Date().toISOString()
-            },
-            {
-                id: uuid(), name: 'Mountain View Lodge', location: 'Manali, Himachal Pradesh',
-                description: 'Nestled in the Himalayan foothills, our cozy lodge offers panoramic mountain views, adventure activities, and the perfect escape from city life.',
-                rating: 4.6, price_per_night: 3800, whatsapp_number: '919876543212',
-                amenities: ['WiFi', 'Fireplace', 'Trekking', 'Restaurant', 'Parking', 'Bonfire'],
-                images: ['https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800', 'https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800', 'https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=800'],
-                category: 'Lodge', is_active: true, created_at: new Date().toISOString()
-            },
-            {
-                id: uuid(), name: 'Urban Stay Express', location: 'Mumbai, Maharashtra',
-                description: 'Modern and affordable hotel in the heart of Mumbai. Perfect for business travellers and tourists looking for comfort without breaking the bank.',
-                rating: 4.2, price_per_night: 2200, whatsapp_number: '919876543213',
-                amenities: ['WiFi', 'AC', 'TV', 'Parking', 'Laundry', '24/7 Reception'],
-                images: ['https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800', 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800', 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800'],
-                category: 'Budget', is_active: true, created_at: new Date().toISOString()
-            },
-            {
-                id: uuid(), name: 'Lake View Heritage', location: 'Udaipur, Rajasthan',
-                description: 'A stunning heritage hotel overlooking Lake Pichola. Enjoy the romance of Udaipur with rooftop dining, boat rides, and cultural experiences.',
-                rating: 4.9, price_per_night: 12000, whatsapp_number: '919876543214',
-                amenities: ['WiFi', 'Pool', 'Spa', 'Lake View', 'Restaurant', 'Cultural Shows', 'Boat Rides'],
-                images: ['https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800', 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800', 'https://images.unsplash.com/photo-1540541338287-41700207dee6?w=800'],
-                category: 'Luxury', is_active: true, created_at: new Date().toISOString()
-            },
-            {
-                id: uuid(), name: 'Backpacker\'s Haven', location: 'Rishikesh, Uttarakhand',
-                description: 'The ultimate backpacker experience on the banks of the Ganges. Dorm beds and private rooms available with yoga, rafting, and good vibes included.',
-                rating: 4.3, price_per_night: 800, whatsapp_number: '919876543215',
-                amenities: ['WiFi', 'Common Kitchen', 'Yoga', 'Rafting', 'Café', 'Lockers'],
-                images: ['https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800', 'https://images.unsplash.com/photo-1590073242678-70ee3fc28e8e?w=800', 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?w=800'],
-                category: 'Budget', is_active: true, created_at: new Date().toISOString()
             }
         ];
 
