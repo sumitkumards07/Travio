@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <title>Admin Panel — Travio</title>
+    <meta name="robots" content="noindex, nofollow"/>
+    <link rel="icon" sizes="192x192" href="images/0d189acb-3f82-4b2c-b95f-ad1d6a803d13.png"/>
+    <link rel="stylesheet" href="css/travio.css" type="text/css"/>
+    <style>
+        body {
+            font-family: 'Airbnb Cereal VF', Circular, -apple-system, BlinkMacSystemFont, Roboto, Helvetica Neue, sans-serif;
+            margin: 0;
+            color: #222;
+            background: #f9fafb;
+            -webkit-font-smoothing: antialiased;
+        }
+        @font-face {
+            font-family: 'Airbnb Cereal VF';
+            src: url('fonts/AirbnbCerealVF_W_Wght.8816d9e5c3b6a860636193e36b6ac4e4.woff2') format('woff2-variations');
+            font-display: swap;
+        }
+    </style>
+</head>
+<body class="admin-wrap">
+    <!-- Login Screen -->
+    <div id="login-screen" class="admin-login-wrap">
+        <div class="admin-login-card">
+            <div class="logo-icon">
+                <svg width="48" height="48" viewBox="0 0 32 32" fill="currentColor">
+                    <path d="M16 2C9.4 2 4 7.4 4 14C4 22 16 30 16 30C16 30 28 22 28 14C28 7.4 22.6 2 16 2ZM16 25C13 22 7 16 7 14C7 9 11 5 16 5C21 5 25 9 25 14C25 16 19 22 16 25Z"/>
+                    <path d="M16 8L11 13H14V18H18V13H21L16 8Z"/>
+                </svg>
+            </div>
+            <h1>Travio Admin</h1>
+            <p>Enter your admin password to continue</p>
+            <form id="login-form">
+                <div class="form-group">
+                    <input type="password" id="admin-password" placeholder="Admin password" required autocomplete="current-password"/>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg" style="width:100%;">Sign In</button>
+                <p id="login-error" style="color:var(--travio-danger); font-size:13px; margin-top:12px; display:none;">Incorrect password. Try again.</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard (hidden until login) -->
+    <div id="dashboard" style="display:none;">
+        <!-- Top Bar -->
+        <div class="admin-topbar">
+            <a href="index.html" class="logo">
+                <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16 2C9.4 2 4 7.4 4 14C4 22 16 30 16 30C16 30 28 22 28 14C28 7.4 22.6 2 16 2ZM16 25C13 22 7 16 7 14C7 9 11 5 16 5C21 5 25 9 25 14C25 16 19 22 16 25Z"/><path d="M16 8L11 13H14V18H18V13H21L16 8Z"/></svg>
+                travio
+            </a>
+            <div style="display:flex; align-items:center; gap:12px;">
+                <a href="index.html" class="btn btn-secondary btn-sm">View Site</a>
+                <button id="logout-btn" class="btn btn-sm" style="background:#f3f4f6; color:#6b7280;">Logout</button>
+            </div>
+        </div>
+
+        <div class="admin-content">
+            <!-- Stats -->
+            <div class="admin-stats" id="stats-row"></div>
+
+            <!-- Hotels Section -->
+            <div class="admin-section">
+                <div class="admin-section-header">
+                    <h2>Hotels</h2>
+                    <button id="add-hotel-btn" class="btn btn-primary">
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="7" y1="1" x2="7" y2="13"/><line x1="1" y1="7" x2="13" y2="7"/></svg>
+                        Add Hotel
+                    </button>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table class="admin-table" id="hotels-table">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Location</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Rating</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="hotels-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hotel Modal -->
+    <div class="modal-overlay" id="hotel-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modal-title">Add Hotel</h2>
+                <button class="modal-close" onclick="closeModal()">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="2" y1="2" x2="14" y2="14"/><line x1="14" y1="2" x2="2" y2="14"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="hotel-form">
+                    <input type="hidden" id="hotel-id"/>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Hotel Name *</label>
+                            <input type="text" id="hotel-name" required placeholder="e.g. The Grand Palace"/>
+                        </div>
+                        <div class="form-group">
+                            <label>Location *</label>
+                            <input type="text" id="hotel-location" required placeholder="e.g. Jaipur, Rajasthan"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="hotel-desc" rows="3" placeholder="Describe the hotel..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select id="hotel-category">
+                                <option value="Luxury">Luxury</option>
+                                <option value="Resort">Resort</option>
+                                <option value="Lodge">Lodge</option>
+                                <option value="Budget">Budget</option>
+                                <option value="Villa">Villa</option>
+                                <option value="Boutique">Boutique</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>WhatsApp Number *</label>
+                            <input type="text" id="hotel-whatsapp" required placeholder="e.g. 919876543210"/>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Price per night (₹)</label>
+                            <input type="number" id="hotel-price" min="0" placeholder="e.g. 5000"/>
+                        </div>
+                        <div class="form-group">
+                            <label>Rating (1-5)</label>
+                            <input type="number" id="hotel-rating" min="1" max="5" step="0.1" placeholder="e.g. 4.5"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Amenities (comma separated)</label>
+                        <input type="text" id="hotel-amenities" placeholder="e.g. WiFi, Pool, Spa, Parking"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Image URLs (one per line)</label>
+                        <textarea id="hotel-images" rows="3" placeholder="https://images.unsplash.com/photo-...&#10;https://images.unsplash.com/photo-..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Or upload images</label>
+                        <div class="upload-zone" id="image-upload-zone">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            <p>Click or drag images here</p>
+                            <input type="file" id="image-files" multiple accept="image/*" style="display:none;"/>
+                        </div>
+                        <div class="upload-previews" id="upload-previews"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-primary" id="save-hotel-btn">Save Hotel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Room Modal -->
+    <div class="modal-overlay" id="room-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="room-modal-title">Add Room Type</h2>
+                <button class="modal-close" onclick="closeRoomModal()">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="2" y1="2" x2="14" y2="14"/><line x1="14" y1="2" x2="2" y2="14"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="room-form">
+                    <input type="hidden" id="room-id"/>
+                    <input type="hidden" id="room-hotel-id"/>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Room Name *</label>
+                            <input type="text" id="room-name" required placeholder="e.g. Deluxe Room"/>
+                        </div>
+                        <div class="form-group">
+                            <label>Price per night (₹) *</label>
+                            <input type="number" id="room-price" min="0" required placeholder="e.g. 3500"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="room-desc" rows="2" placeholder="Describe the room..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Max Guests</label>
+                            <input type="number" id="room-guests" min="1" value="2" placeholder="2"/>
+                        </div>
+                        <div class="form-group">
+                            <label>Amenities (comma separated)</label>
+                            <input type="text" id="room-amenities" placeholder="e.g. AC, TV, WiFi"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Room Image URL</label>
+                        <input type="text" id="room-image" placeholder="https://..."/>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeRoomModal()">Cancel</button>
+                <button class="btn btn-primary" id="save-room-btn">Save Room</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Global Footer -->
+    <footer class="bg-surface-container border-t border-surface-variant pt-16 pb-8 mt-16">
+        <div class="max-w-7xl mx-auto px-6 md:px-16">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="md:col-span-2">
+                    <a href="index.html" class="font-display-lg text-2xl font-bold tracking-tight text-primary mb-4 block">Travio</a>
+                    <p class="text-on-surface-variant font-body-sm leading-relaxed mb-6 max-w-md">Travio is a booking marketplace connecting travelers with independent hotel partners. We simplify discovery and booking to provide a seamless travel experience.</p>
+                    <div class="space-y-2 text-on-surface-variant font-body-sm">
+                        <p><strong>Legal Name:</strong> Travio India Pvt. Ltd.</p>
+                        
+                        <p><strong>Registered Address:</strong> Level 4, DLF Cyber City, Phase 2, Gurugram, Haryana 122002, India</p>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-headline-md text-on-surface mb-4">Quick Links</h4>
+                    <ul class="space-y-3 font-body-sm text-on-surface-variant">
+                        <li><a href="about.html" class="hover:text-primary transition-colors">About Us</a></li>
+                        <li><a href="contact.html" class="hover:text-primary transition-colors">Contact Us</a></li>
+                        <li><a href="admin.html" class="hover:text-primary transition-colors">Partner Dashboard</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-headline-md text-on-surface mb-4">Legal</h4>
+                    <ul class="space-y-3 font-body-sm text-on-surface-variant">
+                        <li><a href="privacy-policy.html" class="hover:text-primary transition-colors">Privacy Policy</a></li>
+                        <li><a href="terms-and-conditions.html" class="hover:text-primary transition-colors">Terms & Conditions</a></li>
+                        <li><a href="cancellation-and-refund-policy.html" class="hover:text-primary transition-colors">Cancellation & Refund Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-surface-variant pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="text-on-surface-variant font-body-sm">© <script>document.write(new Date().getFullYear())</script> Travio India Pvt. Ltd.. All rights reserved.</p>
+                <div class="flex gap-4 text-on-surface-variant font-body-sm">
+                    <a href="mailto:support@travio.in" class="hover:text-primary transition-colors">support@travio.in</a>
+                    <span>|</span>
+                    <span>+91 98765 43210</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/db.js?v=2"></script>
+    <script src="js/admin.js?v=2"></script>
+</body>
+</html>
