@@ -75,8 +75,8 @@
 
 .travio-card-badge {
     position: absolute;
-    top: 12px;
-    left: 12px;
+    top: 16px;
+    left: 16px;
     background: var(--travio-primary);
     color: #fff;
     font-size: 12px;
@@ -1183,6 +1183,26 @@
         padding: 16px 24px !important;
         position: relative !important;
         z-index: 50;
+    }
+    
+    .c13cw3wj {
+        order: 1 !important;
+    }
+    
+    .cg7l307 {
+        order: 2 !important;
+        margin-left: auto !important;
+    }
+    
+    .f1hztvqy {
+        order: 3 !important;
+        width: 100% !important;
+        flex: 1 1 100% !important;
+        margin-top: 16px !important;
+    }
+
+    .ogt7ox8 {
+        display: none !important;
     }
     
     .l3mxch7 {
