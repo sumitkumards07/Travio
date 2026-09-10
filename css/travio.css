@@ -84,6 +84,7 @@
     padding: 4px 10px;
     border-radius: 20px;
     letter-spacing: 0.3px;
+    z-index: 10;
 }
 
 .travio-card-favorite {
@@ -1149,6 +1150,24 @@
     }
     #hotel-grid {
         padding: 0 16px 32px;
+        display: flex !important;
+        flex-direction: row;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        padding-right: 1rem;
+        padding-bottom: max(32px, env(safe-area-inset-bottom));
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #hotel-grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .travio-card {
+        scroll-snap-align: start;
+        min-width: 85vw;
+        flex-shrink: 0;
     }
 
     /* Index.html Header optimizations */
@@ -1156,10 +1175,16 @@
         flex-wrap: wrap !important;
         height: auto !important;
         padding: 16px 24px !important;
+        z-index: 50;
     }
     
     .cg7l307 {
         display: none !important; /* Hide secondary menu on mobile */
+    }
+
+    /* Hide the category tabs on mobile (Hotels, Experiences, Services) */
+    .c1q7wpad {
+        display: none !important;
     }
 
     /* Search bar grid */
@@ -1185,6 +1210,7 @@
     /* Make inner containers auto height */
     .fhzfs0e {
         height: auto !important;
+        width: 100% !important;
     }
     
     /* Hide the vertical dividers */
@@ -1192,9 +1218,22 @@
         display: none !important;
     }
     
-    /* Check-in/checkout container */
+    /* Check-in/checkout container - fully stacked */
     .fhzfs0e > div[style*="justify-content: space-between"] {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 16px !important;
         padding: 8px !important;
+        height: auto !important;
+    }
+
+    .fhzfs0e > div[style*="justify-content: space-between"] > div {
+        width: 100% !important;
+    }
+
+    /* Remove inline divider between Check-in/out */
+    .fhzfs0e > div[style*="justify-content: space-between"] > div[style*="width: 1px"] {
+        display: none !important;
     }
     
     /* Fix the search button */
@@ -1220,5 +1259,10 @@
         content: 'Search';
         font-weight: 600;
         font-size: 16px;
+    }
+
+    /* Safe Area Padding for Footer */
+    footer, .site-footer {
+        padding-bottom: max(2rem, env(safe-area-inset-bottom)) !important;
     }
 }
