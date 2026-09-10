@@ -205,7 +205,7 @@ const TDB = (() => {
 
     // ── SEED DEMO DATA ──
     function seedDemoData() {
-        const DB_VERSION = '1.5';
+        const DB_VERSION = '1.6';
         if (localStorage.getItem('travio_db_version') !== DB_VERSION) {
             localStorage.removeItem('travio_hotels');
             localStorage.removeItem('travio_rooms');
@@ -237,15 +237,19 @@ const TDB = (() => {
 
         // Seed room types for each new hotel
         const roomTemplates = [
-            { name: 'Standard Room', description: 'Comfortable room with all basic amenities.', priceMult: 1, max_guests: 2, amenities: ['AC', 'TV', 'WiFi', 'Attached Bathroom'] },
-            { name: 'Deluxe Room', description: 'Spacious room with premium furnishings and city/garden view.', priceMult: 1.5, max_guests: 2, amenities: ['AC', 'TV', 'WiFi', 'Mini Bar', 'City View', 'Attached Bathroom'] },
-            { name: 'Suite', description: 'Luxurious suite with separate living area and premium amenities.', priceMult: 2.5, max_guests: 4, amenities: ['AC', 'TV', 'WiFi', 'Mini Bar', 'Living Room', 'Bathtub', 'Premium View'] }
+            { name: 'NON AC 2 BED', description: 'Comfortable non-AC room with 2 beds.', price_per_night: 1399, max_guests: 2, amenities: ['Fan', 'TV', 'WiFi', 'Attached Bathroom'] },
+            { name: 'AC ROOM 2 BED', description: 'Comfortable air-conditioned room with 2 beds.', price_per_night: 1699, max_guests: 2, amenities: ['AC', 'TV', 'WiFi', 'Attached Bathroom'] },
+            { name: 'NON-AC 4 BED', description: 'Spacious non-AC room with 4 beds, ideal for groups.', price_per_night: 2299, max_guests: 4, amenities: ['Fan', 'TV', 'WiFi', 'Attached Bathroom'] },
+            { name: 'AC 4 BED', description: 'Spacious air-conditioned room with 4 beds, ideal for groups.', price_per_night: 2599, max_guests: 4, amenities: ['AC', 'TV', 'WiFi', 'Attached Bathroom'] },
+            { name: 'FAMILY ROOM', description: 'Large family suite with premium amenities and extra space.', price_per_night: 2999, max_guests: 6, amenities: ['AC', 'TV', 'WiFi', 'Attached Bathroom', 'Living Area'] }
         ];
 
         const roomImages = [
             'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600',
             'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600',
-            'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600'
+            'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600',
+            'https://images.unsplash.com/photo-1560067174-c5a3a8f37060?w=600',
+            'https://images.unsplash.com/photo-1591088398332-8a7791972843?w=600'
         ];
 
         const demoRooms = getStore('travio_rooms');
@@ -256,7 +260,7 @@ const TDB = (() => {
                     hotel_id: hotel.id,
                     name: tmpl.name,
                     description: tmpl.description,
-                    price_per_night: Math.round(hotel.price_per_night * tmpl.priceMult),
+                    price_per_night: tmpl.price_per_night,
                     max_guests: tmpl.max_guests,
                     image_url: roomImages[i],
                     amenities: tmpl.amenities
