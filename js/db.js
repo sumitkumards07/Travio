@@ -205,7 +205,7 @@ const TDB = (() => {
 
     // ── SEED DEMO DATA ──
     function seedDemoData() {
-        const DB_VERSION = '1.2';
+        const DB_VERSION = '1.4';
         if (localStorage.getItem('travio_db_version') !== DB_VERSION) {
             localStorage.removeItem('travio_hotels');
             localStorage.removeItem('travio_rooms');
@@ -232,6 +232,18 @@ const TDB = (() => {
                     'https://cdn.jsdelivr.net/gh/sumitkumards07/Travio@main/images/byke/unnamed-52.webp'
                 ],
                 category: 'Resort', is_active: true, created_at: new Date().toISOString()
+            },
+            {
+                id: uuid(), name: 'Karnataka Bhavan Tirumala', location: 'Tirupati, Andhra Pradesh',
+                description: 'Karnataka Bhavan Tirumala provides premium accommodation for devotees, situated in the heart of Tirumala. It offers divine comfort, modern amenities, and warm hospitality, just a 5-minute walk to the main Tirumala Temple.',
+                rating: 4.8, price_per_night: 2000, whatsapp_number: '917082364319',
+                amenities: ['Free WiFi', 'AC', 'Parking', 'Restaurant', '24/7 Room Service', 'Security'],
+                images: [
+                    'https://www.karnatakabhavantirumala.website/assets/1.jpg',
+                    'https://www.karnatakabhavantirumala.website/assets/2.jpg',
+                    'https://www.karnatakabhavantirumala.website/assets/3.jpg'
+                ],
+                category: 'Lodge', is_active: true, created_at: new Date().toISOString()
             }
         ];
 
