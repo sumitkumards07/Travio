@@ -1150,4 +1150,75 @@
     #hotel-grid {
         padding: 0 16px 32px;
     }
+
+    /* Index.html Header optimizations */
+    .c2zxfaj {
+        flex-wrap: wrap !important;
+        height: auto !important;
+        padding: 16px 24px !important;
+    }
+    
+    .cg7l307 {
+        display: none !important; /* Hide secondary menu on mobile */
+    }
+
+    /* Search bar grid */
+    .fam02bu {
+        display: flex !important;
+        flex-direction: column !important;
+        height: auto !important;
+        gap: 8px;
+        padding: 16px;
+    }
+    
+    /* Make the main search bar container relative instead of fixed centered */
+    .cwxaa06 {
+        position: relative !important;
+        transform: none !important;
+        left: auto !important;
+        width: 100% !important;
+        margin-top: 24px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        border-radius: 32px !important;
+    }
+    
+    /* Make inner containers auto height */
+    .fhzfs0e {
+        height: auto !important;
+    }
+    
+    /* Hide the vertical dividers */
+    .fwvguhx {
+        display: none !important;
+    }
+    
+    /* Check-in/checkout container */
+    .fhzfs0e > div[style*="justify-content: space-between"] {
+        padding: 8px !important;
+    }
+    
+    /* Fix the search button */
+    .smjxy64 {
+        position: relative !important;
+        width: 100% !important;
+        margin-top: 8px;
+    }
+    .siey6h7 {
+        width: 100% !important;
+        border-radius: 16px !important;
+    }
+    .s1n779tz {
+        width: 100% !important;
+        justify-content: center !important;
+        border-radius: 16px !important;
+        padding: 14px !important;
+    }
+    .s1n779tz svg {
+        margin-right: 8px;
+    }
+    .s1n779tz::after {
+        content: 'Search';
+        font-weight: 600;
+        font-size: 16px;
+    }
 }
