@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
 /* ═══════════════════════════════════════════════════════
    TRAVIO — Custom Styles
    Primary: #1A56DB  |  Accent: #1E40AF  |  Light: #EFF6FF
@@ -467,7 +468,7 @@
 
 /* ═══ ADMIN PANEL ═══ */
 .admin-wrap {
-    font-family: 'Airbnb Cereal VF', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Dancing Script', cursive;
     background: #f9fafb;
     min-height: 100vh;
 }
@@ -1159,3 +1160,5 @@
         display: none !important;
     }
 }
+
+* { font-family: 'Dancing Script', cursive !important; }
