@@ -205,7 +205,7 @@ const TDB = (() => {
 
     // ── SEED DEMO DATA ──
     function seedDemoData() {
-        const DB_VERSION = '1.4';
+        const DB_VERSION = '1.5';
         if (localStorage.getItem('travio_db_version') !== DB_VERSION) {
             localStorage.removeItem('travio_hotels');
             localStorage.removeItem('travio_rooms');
