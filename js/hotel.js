@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <div class="flex justify-between items-start mb-2">
                     <h4 class="font-headline-md text-xl text-on-surface">${room.name}</h4>
                 </div>
-                <div class="text-primary font-headline-md text-2xl mb-4">₹${(room.price_per_night || 0).toLocaleString('en-IN')}<span class="text-xs text-secondary font-body-md font-normal ml-1">/ night (inc. taxes & fees)</span></div>
+                <div class="text-primary font-headline-md text-2xl mb-4 price-font">₹${(room.price_per_night || 0).toLocaleString('en-IN')}<span class="text-xs text-secondary font-body-md font-normal ml-1">/ night (inc. taxes & fees)</span></div>
                 <ul class="space-y-2 mb-6 text-on-surface-variant font-body-md flex-grow">
                     ${(room.amenities || []).map(a => `<li class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-sm">check_circle</span> ${a}</li>`).join('')}
                 </ul>

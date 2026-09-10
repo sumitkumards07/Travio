@@ -468,7 +468,7 @@
 
 /* ═══ ADMIN PANEL ═══ */
 .admin-wrap {
-    font-family: 'Dancing Script', cursive;
+    font-family: 'Airbnb Cereal VF', -apple-system, BlinkMacSystemFont, sans-serif;
     background: #f9fafb;
     min-height: 100vh;
 }
@@ -1161,4 +1161,6 @@
     }
 }
 
-* { font-family: 'Dancing Script', cursive !important; }
+
+
+.price-font { font-family: 'Dancing Script', cursive !important; }

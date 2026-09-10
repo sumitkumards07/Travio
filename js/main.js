@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </span>
                 </div>
                 <p class="travio-card-location">${hotel.location}</p>
-                <p class="travio-card-price"><strong>from ₹${(hotel.price_per_night || 0).toLocaleString('en-IN')}</strong> <span style="font-size: 0.75rem;">/ night (inc. taxes & fees)</span></p>
+                <p class="travio-card-price"><strong class="price-font text-lg">from ₹${(hotel.price_per_night || 0).toLocaleString('en-IN')}</strong> <span style="font-size: 0.75rem;">/ night (inc. taxes & fees)</span></p>
             </div>
         `;
         return card;
