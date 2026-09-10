@@ -217,26 +217,9 @@ const TDB = (() => {
 
         const demoHotels = [
             {
-                id: uuid(), name: 'The Byke Heritage Hotel Matheran', location: 'Matheran, Maharashtra',
-                description: 'At The Byke Heritage Hotel Matheran, we offer comfortable accommodations, modern amenities, and warm hospitality in a peaceful natural setting. Our services include well-appointed rooms, dining facilities, and personalized guest support for a memorable stay.',
-                rating: 4.6, price_per_night: 3599, whatsapp_number: '918930146635',
-                amenities: ['WiFi', 'AC', 'Comfortable Bedding', 'Dining Facilities', 'Room Service'],
-                images: [
-                    'https://cdn.jsdelivr.net/gh/sumitkumards07/Travio@main/images/byke/unnamed-60.webp', 
-                    'https://cdn.jsdelivr.net/gh/sumitkumards07/Travio@main/images/byke/unnamed-59.webp', 
-                    'https://cdn.jsdelivr.net/gh/sumitkumards07/Travio@main/images/byke/unnamed-58.webp', 
-                    'https://cdn.jsdelivr.net/gh/sumitkumards07/Travio@main/images/byke/unnamed-57.webp', 
-                    'https://cdn.jsdelivr.net/gh/sumitkumards07/Travio@main/images/byke/unnamed-56.webp', 
-                    'https://cdn.jsdelivr.net/gh/sumitkumards07/Travio@main/images/byke/unnamed-55.webp', 
-                    'https://cdn.jsdelivr.net/gh/sumitkumards07/Travio@main/images/byke/unnamed-54.webp', 
-                    'https://cdn.jsdelivr.net/gh/sumitkumards07/Travio@main/images/byke/unnamed-52.webp'
-                ],
-                category: 'Resort', is_active: true, created_at: new Date().toISOString()
-            },
-            {
                 id: uuid(), name: 'Karnataka Bhavan Tirumala', location: 'Tirupati, Andhra Pradesh',
                 description: 'Karnataka Bhavan Tirumala provides premium accommodation for devotees, situated in the heart of Tirumala. It offers divine comfort, modern amenities, and warm hospitality, just a 5-minute walk to the main Tirumala Temple.',
-                rating: 4.8, price_per_night: 2000, whatsapp_number: '917082364319',
+                rating: 4.8, price_per_night: 2000, whatsapp_number: '919665850114',
                 amenities: ['Free WiFi', 'AC', 'Parking', 'Restaurant', '24/7 Room Service', 'Security'],
                 images: [
                     'https://www.karnatakabhavantirumala.website/assets/1.jpg',
@@ -273,7 +256,7 @@ const TDB = (() => {
                     hotel_id: hotel.id,
                     name: tmpl.name,
                     description: tmpl.description,
-                    price_per_night: hotel.name === 'The Byke Heritage Hotel Matheran' ? 3599 : Math.round(hotel.price_per_night * tmpl.priceMult),
+                    price_per_night: Math.round(hotel.price_per_night * tmpl.priceMult),
                     max_guests: tmpl.max_guests,
                     image_url: roomImages[i],
                     amenities: tmpl.amenities
