@@ -2,12 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#ffffff">
     <title>Terms & Conditions — Travio</title>
     <meta name="description" content="Travio's Terms and Conditions. Please read these terms carefully before using our hotel booking services.">
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18317251813"></script>
 <script>
@@ -22,6 +25,58 @@
   window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1A56DB',
+                        'primary-container': '#DBEAFE',
+                        'on-primary': '#FFFFFF',
+                        'on-primary-container': '#1E3A8A',
+                        
+                        secondary: '#4B5563',
+                        'secondary-container': '#F3F4F6',
+                        'on-secondary': '#FFFFFF',
+                        'on-secondary-container': '#1F2937',
+
+                        background: '#F9FAFB',
+                        'on-background': '#111827',
+                        
+                        surface: '#FFFFFF',
+                        'on-surface': '#111827',
+                        'surface-variant': '#E5E7EB',
+                        'on-surface-variant': '#4B5563',
+                        
+                        'surface-container-low': '#F9FAFB',
+                        'surface-container': '#F3F4F6',
+                        'surface-container-high': '#E5E7EB',
+                        
+                        error: '#DC2626',
+                        'error-container': '#FEE2E2',
+                        'on-error': '#FFFFFF',
+                        'on-error-container': '#991B1B',
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .font-display-lg { @apply font-display text-4xl tracking-tight font-bold; }
+            .font-headline-lg { @apply font-display text-3xl tracking-tight font-semibold; }
+            .font-headline-md { @apply font-display text-2xl tracking-tight font-semibold; }
+            .font-title-lg { @apply font-sans text-xl font-semibold; }
+            .font-title-md { @apply font-sans text-lg font-medium tracking-wide; }
+            .font-body-lg { @apply font-sans text-base font-normal; }
+            .font-body-md { @apply font-sans text-sm font-normal; }
+            .font-label-md { @apply font-sans text-sm font-medium tracking-wide; }
+        }
+    </style>
 </head>
 <body class="bg-surface text-on-surface font-body-md selection:bg-primary selection:text-white">
 
@@ -32,7 +87,7 @@
         </div>
     </header>
 
-    <main class="max-w-4xl mx-auto py-16 px-6 md:px-16 prose prose-slate">
+    <main class="max-w-4xl mx-auto py-10 sm:py-16 px-6 md:px-16 prose prose-slate">
         <h1 class="text-4xl font-headline-lg mb-8">Terms & Conditions</h1>
         <p class="text-sm text-secondary mb-8">Last Updated: July 12, 2026</p>
 

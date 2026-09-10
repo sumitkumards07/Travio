@@ -75,8 +75,8 @@
 
 .travio-card-badge {
     position: absolute;
-    top: 16px;
-    left: 16px;
+    top: 12px;
+    left: 12px;
     background: var(--travio-primary);
     color: #fff;
     font-size: 12px;
@@ -84,7 +84,6 @@
     padding: 4px 10px;
     border-radius: 20px;
     letter-spacing: 0.3px;
-    z-index: 10;
 }
 
 .travio-card-favorite {
@@ -1150,154 +1149,5 @@
     }
     #hotel-grid {
         padding: 0 16px 32px;
-        display: flex !important;
-        flex-direction: row;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        scroll-behavior: smooth;
-        padding-right: 1rem;
-        padding-bottom: max(32px, env(safe-area-inset-bottom));
-        -webkit-overflow-scrolling: touch;
-    }
-
-    #hotel-grid::-webkit-scrollbar {
-        display: none;
-    }
-
-    #hotel-grid::after {
-        content: '';
-        min-width: 16px;
-        height: 1px;
-    }
-
-    .travio-card {
-        scroll-snap-align: start;
-        min-width: 85vw;
-        flex-shrink: 0;
-    }
-
-    /* Index.html Header optimizations */
-    .c2zxfaj {
-        flex-wrap: wrap !important;
-        height: auto !important;
-        padding: 16px 24px !important;
-        position: relative !important;
-        z-index: 50;
-    }
-    
-    .c13cw3wj {
-        order: 1 !important;
-    }
-    
-    .cg7l307 {
-        order: 2 !important;
-        margin-left: auto !important;
-    }
-    
-    .f1hztvqy {
-        order: 3 !important;
-        width: 100% !important;
-        flex: 1 1 100% !important;
-        margin-top: 16px !important;
-    }
-
-    .ogt7ox8 {
-        display: none !important;
-    }
-    
-    .l3mxch7 {
-        display: none !important; /* Hide secondary menu items (Become a host, etc.) on mobile */
-    }
-
-    /* Scrollable category tabs on mobile (Hotels, Experiences, Services) */
-    .c1q7wpad {
-        display: flex !important;
-        overflow-x: auto;
-        padding-bottom: 8px;
-        margin-top: 16px;
-        -webkit-overflow-scrolling: touch;
-        width: 100%;
-    }
-    .c1q7wpad::-webkit-scrollbar {
-        display: none;
-    }
-
-    /* Search bar grid */
-    .fam02bu {
-        display: flex !important;
-        flex-direction: column !important;
-        height: auto !important;
-        gap: 8px;
-        padding: 16px;
-    }
-    
-    /* Make the main search bar container relative instead of fixed centered */
-    .cwxaa06 {
-        position: relative !important;
-        transform: none !important;
-        left: auto !important;
-        width: 100% !important;
-        margin-top: 24px;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-        border-radius: 32px !important;
-    }
-    
-    /* Make inner containers auto height */
-    .fhzfs0e {
-        height: auto !important;
-        width: 100% !important;
-    }
-    
-    /* Hide the vertical dividers */
-    .fwvguhx {
-        display: none !important;
-    }
-    
-    /* Check-in/checkout container - fully stacked */
-    .fhzfs0e > div[style*="justify-content: space-between"] {
-        flex-direction: column !important;
-        align-items: stretch !important;
-        gap: 16px !important;
-        padding: 8px !important;
-        height: auto !important;
-    }
-
-    .fhzfs0e > div[style*="justify-content: space-between"] > div {
-        width: 100% !important;
-    }
-
-    /* Remove inline divider between Check-in/out */
-    .fhzfs0e > div[style*="justify-content: space-between"] > div[style*="width: 1px"] {
-        display: none !important;
-    }
-    
-    /* Fix the search button */
-    .smjxy64 {
-        position: relative !important;
-        width: 100% !important;
-        margin-top: 8px;
-    }
-    .siey6h7 {
-        width: 100% !important;
-        border-radius: 16px !important;
-    }
-    .s1n779tz {
-        width: 100% !important;
-        justify-content: center !important;
-        border-radius: 16px !important;
-        padding: 14px !important;
-    }
-    .s1n779tz svg {
-        margin-right: 8px;
-    }
-    .s1n779tz::after {
-        content: 'Search';
-        font-weight: 600;
-        font-size: 16px;
-    }
-
-    /* Safe Area Padding for Footer */
-    footer, .site-footer {
-        padding-bottom: max(2rem, env(safe-area-inset-bottom)) !important;
     }
 }
