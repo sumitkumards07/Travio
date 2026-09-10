@@ -116,6 +116,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             <img src="${images[4]}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
         </div>
     </div>
+
+    <div class="flex mt-6">
+        <a href="tel:${(hotel.whatsapp_number || '').replace(/[^0-9+]/g, '')}" class="w-full md:w-auto inline-flex px-8 py-4 bg-primary text-white rounded-xl font-headline-md text-lg hover:bg-primary/90 transition-all active:scale-95 items-center justify-center gap-2 shadow-md">
+            <span class="material-symbols-outlined">call</span>
+            Book Now
+        </a>
+    </div>
 </section>
 
 
