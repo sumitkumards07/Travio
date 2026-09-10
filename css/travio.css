@@ -1151,3 +1151,11 @@
         padding: 0 16px 32px;
     }
 }
+
+/* Hide Experiences and Services tabs on mobile */
+@media (max-width: 768px) {
+    #search-block-tab-EXPERIENCES,
+    #search-block-tab-SERVICES {
+        display: none !important;
+    }
+}
