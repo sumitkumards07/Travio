@@ -1164,6 +1164,12 @@
         display: none;
     }
 
+    #hotel-grid::after {
+        content: '';
+        min-width: 16px;
+        height: 1px;
+    }
+
     .travio-card {
         scroll-snap-align: start;
         min-width: 85vw;
@@ -1175,16 +1181,25 @@
         flex-wrap: wrap !important;
         height: auto !important;
         padding: 16px 24px !important;
+        position: relative !important;
         z-index: 50;
     }
     
-    .cg7l307 {
-        display: none !important; /* Hide secondary menu on mobile */
+    .l3mxch7 {
+        display: none !important; /* Hide secondary menu items (Become a host, etc.) on mobile */
     }
 
-    /* Hide the category tabs on mobile (Hotels, Experiences, Services) */
+    /* Scrollable category tabs on mobile (Hotels, Experiences, Services) */
     .c1q7wpad {
-        display: none !important;
+        display: flex !important;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        margin-top: 16px;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+    }
+    .c1q7wpad::-webkit-scrollbar {
+        display: none;
     }
 
     /* Search bar grid */
