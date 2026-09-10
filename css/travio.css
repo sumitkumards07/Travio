@@ -1128,3 +1128,26 @@
     color: inherit;
     text-decoration: underline;
 }
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    .admin-topbar {
+        padding: 12px 16px;
+    }
+    .admin-login-card {
+        padding: 32px 24px;
+        margin: 16px;
+    }
+    .admin-content {
+        padding: 16px;
+    }
+    .modal-header, .modal-body, .modal-footer {
+        padding: 16px;
+    }
+    .travio-categories {
+        padding: 12px 16px;
+    }
+    #hotel-grid {
+        padding: 0 16px 32px;
+    }
+}
