@@ -30,6 +30,20 @@ const TDB = (() => {
             });
     }
 
+    function sanitizeHotelImages(hotel) {
+        if (!hotel) return hotel;
+        if (Array.isArray(hotel.images)) {
+            hotel.images = hotel.images.map(img => {
+                if (typeof img === 'string' && img.includes('karnatakabhavantirumala.website')) {
+                    const m = img.match(/assets\/(\d+)\.jpg/);
+                    return `images/karnataka/${m ? m[1] : '1'}.webp`;
+                }
+                return img;
+            });
+        }
+        return hotel;
+    }
+
     // ── HOTELS ──
     async function getHotels(filters = {}) {
         if (USE_SUPABASE && supabase) {
@@ -43,9 +57,9 @@ const TDB = (() => {
             }
             const { data, error } = await q;
             if (error) throw error;
-            return data;
+            return (data || []).map(sanitizeHotelImages);
         }
-        let hotels = getStore('travio_hotels').filter(h => h.is_active);
+        let hotels = getStore('travio_hotels').map(sanitizeHotelImages).filter(h => h.is_active);
         if (filters.category) hotels = hotels.filter(h => h.category === filters.category);
         if (filters.query) {
             const q = filters.query.toLowerCase();
@@ -61,18 +75,19 @@ const TDB = (() => {
         if (USE_SUPABASE && supabase) {
             const { data, error } = await supabase.from('hotels').select('*').order('created_at', { ascending: false });
             if (error) throw error;
-            return data;
+            return (data || []).map(sanitizeHotelImages);
         }
-        return getStore('travio_hotels');
+        return getStore('travio_hotels').map(sanitizeHotelImages);
     }
 
     async function getHotelById(id) {
         if (USE_SUPABASE && supabase) {
             const { data, error } = await supabase.from('hotels').select('*').eq('id', id).single();
             if (error) throw error;
-            return data;
+            return sanitizeHotelImages(data);
         }
-        return getStore('travio_hotels').find(h => h.id === id) || null;
+        const hotel = getStore('travio_hotels').find(h => h.id === id) || null;
+        return sanitizeHotelImages(hotel);
     }
 
     async function createHotel(hotel) {
@@ -205,14 +220,15 @@ const TDB = (() => {
 
     // ── SEED DEMO DATA ──
     function seedDemoData() {
-        const DB_VERSION = '1.7';
+        const DB_VERSION = '2.0';
         if (localStorage.getItem('travio_db_version') !== DB_VERSION) {
             localStorage.removeItem('travio_hotels');
             localStorage.removeItem('travio_rooms');
             localStorage.setItem('travio_db_version', DB_VERSION);
         }
 
-        const existingHotels = getStore('travio_hotels');
+        const existingHotels = getStore('travio_hotels').map(sanitizeHotelImages);
+        setStore('travio_hotels', existingHotels);
         const existingNames = existingHotels.map(h => h.name);
 
         const demoHotels = [
@@ -222,9 +238,12 @@ const TDB = (() => {
                 rating: 4.8, price_per_night: 2000, whatsapp_number: '919999999999',
                 amenities: ['Free WiFi', 'AC', 'Parking', 'Restaurant', '24/7 Room Service', 'Security'],
                 images: [
-                    'https://www.karnatakabhavantirumala.website/assets/1.jpg',
-                    'https://www.karnatakabhavantirumala.website/assets/2.jpg',
-                    'https://www.karnatakabhavantirumala.website/assets/3.jpg'
+                    'images/karnataka/1.webp',
+                    'images/karnataka/2.webp',
+                    'images/karnataka/3.webp',
+                    'images/karnataka/4.webp',
+                    'images/karnataka/5.webp',
+                    'images/karnataka/6.webp'
                 ],
                 category: 'Lodge', is_active: true, created_at: new Date().toISOString()
             }

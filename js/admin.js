@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         tbody.innerHTML = hotels.map(h => `
             <tr data-id="${h.id}">
-                <td><img class="hotel-thumb" src="${(h.images && h.images[0]) || 'https://via.placeholder.com/56x40'}" alt="${h.name}"/></td>
+                <td><img class="hotel-thumb" src="${(h.images && h.images[0]) || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=200'}" alt="${h.name}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1566073771259-6a8506099945?w=200';"/></td>
                 <td><strong>${h.name}</strong></td>
                 <td>${h.location}</td>
                 <td>${h.category || '—'}</td>

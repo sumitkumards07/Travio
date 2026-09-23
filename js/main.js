@@ -40,15 +40,45 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // ── Search Bar Logic ──
+    // ── Search Bar Logic (Desktop & Mobile) ──
     const searchInput = document.getElementById('bigsearch-query-location-input');
+    const mobileSearchInput = document.getElementById('mobile-search-query-location-input');
     const searchBtn = document.querySelector('[data-testid="structured-search-input-search-button"]');
+    const mobileSearchBtn = document.getElementById('mobile-search-button');
     const searchForm = document.querySelector('form[role="search"]');
-    
-    function handleSearch() {
-        if (searchInput) {
-            const query = searchInput.value.trim();
-            loadHotels(null, query);
+
+    const checkinInput = document.getElementById('search-checkin');
+    const mobileCheckinInput = document.getElementById('mobile-search-checkin');
+    const checkoutInput = document.getElementById('search-checkout');
+    const mobileCheckoutInput = document.getElementById('mobile-search-checkout');
+    const guestsInput = document.getElementById('search-guests');
+    const mobileGuestsInput = document.getElementById('mobile-search-guests');
+
+    // Sync input fields between mobile & desktop views
+    function syncInputs(a, b) {
+        if (!a || !b) return;
+        a.addEventListener('input', () => { b.value = a.value; });
+        b.addEventListener('input', () => { a.value = b.value; });
+    }
+    syncInputs(searchInput, mobileSearchInput);
+    syncInputs(checkinInput, mobileCheckinInput);
+    syncInputs(checkoutInput, mobileCheckoutInput);
+    syncInputs(guestsInput, mobileGuestsInput);
+
+    function getSearchQuery() {
+        const mobileVal = mobileSearchInput ? mobileSearchInput.value.trim() : '';
+        const desktopVal = searchInput ? searchInput.value.trim() : '';
+        return mobileVal || desktopVal || '';
+    }
+
+    function handleSearch(isFromMobile = false) {
+        const query = getSearchQuery();
+        loadHotels(null, query);
+        if (isFromMobile) {
+            const gridSection = document.getElementById('hotel-grid');
+            if (gridSection) {
+                gridSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
     }
 
@@ -62,7 +92,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (searchBtn) {
         searchBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            handleSearch();
+            handleSearch(false);
+        });
+    }
+
+    if (mobileSearchBtn) {
+        mobileSearchBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleSearch(true);
         });
     }
 
@@ -70,10 +107,31 @@ document.addEventListener('DOMContentLoaded', () => {
         searchInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
-                handleSearch();
+                handleSearch(false);
             }
         });
     }
+
+    if (mobileSearchInput) {
+        mobileSearchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSearch(true);
+            }
+        });
+    }
+
+    // ── Category Filter Logic ──
+    const catButtons = document.querySelectorAll('.travio-cat-btn');
+    catButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            catButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const cat = btn.getAttribute('data-category');
+            loadHotels(cat === 'All' ? null : cat, getSearchQuery());
+        });
+    });
 
     // ── Render Hotel Cards ──
     function createHotelCard(hotel) {
@@ -87,24 +145,25 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const url = new URL(card.href, window.location.origin);
             
-            const checkin = document.getElementById('search-checkin');
-            const checkout = document.getElementById('search-checkout');
-            const guests = document.getElementById('search-guests');
+            const checkinVal = (checkinInput && checkinInput.value) || (mobileCheckinInput && mobileCheckinInput.value);
+            const checkoutVal = (checkoutInput && checkoutInput.value) || (mobileCheckoutInput && mobileCheckoutInput.value);
+            const guestsVal = (guestsInput && guestsInput.value) || (mobileGuestsInput && mobileGuestsInput.value);
             
-            if (checkin && checkin.value) url.searchParams.set('checkin', checkin.value);
-            if (checkout && checkout.value) url.searchParams.set('checkout', checkout.value);
-            if (guests && guests.value) url.searchParams.set('guests', guests.value);
+            if (checkinVal) url.searchParams.set('checkin', checkinVal);
+            if (checkoutVal) url.searchParams.set('checkout', checkoutVal);
+            if (guestsVal) url.searchParams.set('guests', guestsVal);
             
             window.location.href = url.toString();
         });
 
+        const fallbackImg = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800';
         const images = hotel.images && hotel.images.length > 0
             ? hotel.images
-            : ['https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800'];
+            : [fallbackImg];
 
         card.innerHTML = `
             <div class="travio-card-img-wrap">
-                <img src="${images[0]}" alt="${hotel.name}" loading="lazy" data-images='${JSON.stringify(images)}' data-index="0"/>
+                <img src="${images[0]}" alt="${hotel.name}" loading="lazy" data-images='${JSON.stringify(images)}' data-index="0" onerror="this.onerror=null; this.src='${fallbackImg}';"/>
                 <span class="travio-card-badge">${hotel.category || 'Hotel'}</span>
                 <button class="travio-card-favorite" onclick="event.preventDefault(); event.stopPropagation();">
                     <svg viewBox="0 0 32 32"><path d="M16 28c7-4.73 14-10 14-17a6.98 6.98 0 00-7-7c-1.8 0-3.58.68-4.95 2.05L16 8.1l-2.05-2.05A6.98 6.98 0 009 4a6.98 6.98 0 00-7 7c0 7 7 12.27 14 17z"></path></svg>
@@ -144,6 +203,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let idx = parseInt(img.dataset.index) + direction;
         if (idx < 0) idx = images.length - 1;
         if (idx >= images.length) idx = 0;
+        img.onerror = function() {
+            this.onerror = null;
+            this.src = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800';
+        };
         img.src = images[idx];
         img.dataset.index = idx;
 
@@ -192,8 +255,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const initialQuery = urlParams.get('query');
     
-    if (initialQuery && searchInput) {
-        searchInput.value = initialQuery;
+    if (initialQuery) {
+        if (searchInput) searchInput.value = initialQuery;
+        if (mobileSearchInput) mobileSearchInput.value = initialQuery;
         loadHotels(null, initialQuery);
     } else {
         loadHotels();

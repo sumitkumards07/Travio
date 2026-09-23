@@ -28,18 +28,32 @@
 /* ── Hotel Grid ── */
 #hotel-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 24px;
-    padding: 0 24px 40px;
+    padding: 0 0 40px;
     max-width: 1760px;
     margin: 0 auto;
+    width: 100%;
 }
 
-@media (min-width: 744px) {
-    #hotel-grid { padding: 0 40px 40px; gap: 24px; }
+@media (max-width: 640px) {
+    #hotel-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        padding: 0 0 32px;
+    }
 }
-@media (min-width: 1128px) {
-    #hotel-grid { padding: 0 80px 60px; gap: 24px; }
+@media (min-width: 641px) and (max-width: 1024px) {
+    #hotel-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+    }
+}
+@media (min-width: 1025px) {
+    #hotel-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 24px;
+    }
 }
 
 /* ── Hotel Card ── */
@@ -156,6 +170,9 @@
 }
 .travio-card-arrow svg { width: 10px; height: 10px; stroke: currentColor; stroke-width: 4; fill: none; }
 .travio-card:hover .travio-card-arrow { opacity: 1; }
+@media (hover: none), (max-width: 768px) {
+    .travio-card-arrow { opacity: 0.9; width: 32px; height: 32px; }
+}
 .travio-card-arrow:hover { transform: translateY(-50%) scale(1.1); }
 .travio-card-arrow.left { left: 8px; }
 .travio-card-arrow.right { right: 8px; }
@@ -208,8 +225,8 @@
 /* ── Category Bar ── */
 .travio-categories {
     display: flex;
-    gap: 32px;
-    padding: 12px 24px;
+    gap: 24px;
+    padding: 12px 16px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
@@ -219,10 +236,10 @@
 .travio-categories::-webkit-scrollbar { display: none; }
 
 @media (min-width: 744px) {
-    .travio-categories { padding: 12px 40px; }
+    .travio-categories { padding: 12px 24px; gap: 32px; }
 }
 @media (min-width: 1128px) {
-    .travio-categories { padding: 12px 80px; }
+    .travio-categories { padding: 12px 32px; }
 }
 
 .travio-cat-btn {

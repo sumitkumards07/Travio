@@ -63,12 +63,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         // Build images for gallery
-        const images = hotel.images && hotel.images.length > 0
-            ? hotel.images
-            : ['https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800'];
+        const fallbackImg = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800';
+        let rawImages = hotel.images && hotel.images.length > 0
+            ? hotel.images.map(img => {
+                if (typeof img === 'string' && img.includes('karnatakabhavantirumala.website')) {
+                    const m = img.match(/assets\/(\d+)\.jpg/);
+                    return `images/karnataka/${m ? m[1] : '1'}.webp`;
+                }
+                return img;
+            })
+            : [fallbackImg];
 
+        const images = [...rawImages];
         // Fill missing gallery slots for bento grid
-        while (images.length < 5) images.push(images[0]);
+        while (images.length < 5) images.push(images[images.length % rawImages.length] || fallbackImg);
 
         // WhatsApp helper
         function getWhatsAppUrl(roomName, price) {
@@ -112,19 +120,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     <div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-2 h-[300px] md:h-[480px] rounded-2xl overflow-hidden group">
         <div class="md:col-span-2 md:row-span-2 h-full relative overflow-hidden">
-            <img src="${images[0]}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            <img src="${images[0]}" onerror="this.onerror=null; this.src='${fallbackImg}';" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
         </div>
         <div class="hidden md:block col-span-1 row-span-1 h-full relative overflow-hidden">
-            <img src="${images[1]}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            <img src="${images[1]}" onerror="this.onerror=null; this.src='${fallbackImg}';" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
         </div>
         <div class="hidden md:block col-span-1 row-span-1 h-full relative overflow-hidden">
-            <img src="${images[2]}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            <img src="${images[2]}" onerror="this.onerror=null; this.src='${fallbackImg}';" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
         </div>
         <div class="hidden md:block col-span-1 row-span-1 h-full relative overflow-hidden">
-            <img src="${images[3]}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            <img src="${images[3]}" onerror="this.onerror=null; this.src='${fallbackImg}';" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
         </div>
         <div class="hidden md:block col-span-1 row-span-1 h-full relative overflow-hidden">
-            <img src="${images[4]}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            <img src="${images[4]}" onerror="this.onerror=null; this.src='${fallbackImg}';" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
         </div>
     </div>
 
@@ -148,7 +156,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         ${rooms.length > 0 ? rooms.map(room => `
         <div class="bg-surface border border-surface-variant group overflow-hidden rounded-2xl flex flex-col transition-all duration-500 hover:-translate-y-2 hover:shadow-xl">
             <div class="h-56 relative overflow-hidden">
-                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="${room.image_url || images[0]}"/>
+                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="${room.image_url || images[0]}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600';"/>
                 <div class="absolute top-4 left-4 bg-primary text-on-primary px-3 py-1 rounded-full text-xs font-label-md shadow-md">Up to ${room.max_guests || 2} guests</div>
             </div>
             <div class="p-6 flex-grow flex flex-col">
@@ -189,7 +197,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     </div>
     <div class="relative group">
         <div class="aspect-[4/5] rounded-2xl overflow-hidden shadow-lg p-2 bg-white border border-surface-variant">
-            <img class="w-full h-full object-cover rounded-xl" src="${images[1] || images[0]}"/>
+            <img class="w-full h-full object-cover rounded-xl" src="${images[1] || images[0]}" onerror="this.onerror=null; this.src='${fallbackImg}';"/>
         </div>
     </div>
 </section>
