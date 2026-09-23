@@ -37,6 +37,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Update page title
         document.title = `${hotel.name} — Travio`;
 
+        // Update floating contact buttons
+        const floatingWa = document.getElementById('floating-wa');
+        if (floatingWa && hotel.whatsapp_number) {
+            floatingWa.href = `https://wa.me/${hotel.whatsapp_number.replace(/[^0-9]/g, '')}`;
+        }
+        const floatingCall = document.getElementById('floating-call');
+        if (floatingCall && hotel.whatsapp_number) {
+            const rawNum = hotel.whatsapp_number.replace(/[^0-9]/g, '');
+            floatingCall.href = `tel:+${rawNum}`;
+        }
+
         // Amenity icon map
         const amenityIcons = {
             'WiFi': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 12.55a11 11 0 0114 0"/><path d="M1.42 9a16 16 0 0121.16 0"/><path d="M8.53 16.11a6 6 0 016.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>`,
